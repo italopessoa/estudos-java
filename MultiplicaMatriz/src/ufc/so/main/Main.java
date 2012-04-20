@@ -1,76 +1,88 @@
 package ufc.so.main;
 
-import javax.swing.JOptionPane;
+import ufc.so.gui.data.MatrizFileRead;
+import ufc.so.gui.xml.XMLFileProperties;
+import ufc.so.thread.ThreadMultiplicar;
 
 /**
  *
- * @author italoney
+ * @author Italo Pessoa - italoneypessoa@gmail.com
  */
 public class Main {
 
     public static void main(String args[]) {
         // o numero de linhas colunas de A tem que ser igualo numero de colunas
         // de B
-        
+
         //linhas e colunas de A e B
-        final int LA = 3,LB = 3;
-        final int CA = 3,CB = 2;
+        final int LA = 3, LB = 3;
+        final int CA = 3, CB = 2;
+
+        Matriz.iniciarMatrizes(LA, CA, LB, CB);
+
+        MatrizFileRead mfr = new MatrizFileRead();
+        int[][] a = mfr.readMatriz(XMLFileProperties.filePathMatriz3x3);
+        int[][] b = mfr.readMatriz(XMLFileProperties.filePathMatriz3x2);
         
-        int A[][] = new int[LA][CA];
-        int B[][] = new int[LB][CB];
-        int resultado[][] = new int[LA][CB];
-        
-        // <editor-fold defaultstate="collapsed" desc="Valores para teste">  
-        A[0][0] = 2;
-        A[0][1] = 1;
-        A[0][2] = 2;
-
-        A[1][0] = 3;
-        A[1][1] = -2;
-        A[1][2] = 0;
-
-        A[2][0] = 1;
-        A[2][1] = -1;
-        A[2][2] = 2;
-
-        B[0][0] = 1;
-        B[0][1] = 2;
-
-        B[1][0] = -2;
-        B[1][1] = 4;
-
-        B[2][0] = -1;
-        B[2][1] = 3;
-        // </editor-fold> 
+        Matriz.cloneMatrizA(a);
+        Matriz.cloneMatrizB(b);
         
         // primeiro percorrer a matriz B, coluna por coluna
         // multiplicando todos os itens da respectiva coluna em A pelo valor atual
         
-        // <editor-fold defaultstate="collapsed" desc="Multiplicar matrizes">  
+        int nThreads = 6;  
+        int x = 0;
+        Thread[] thr = new Thread [nThreads];  
+        
+        // <editor-fold defaultstate="collapsed" desc="ThreadMultiplicar matrizes">  
         for (int colunaB = 0; colunaB < CB; colunaB++) {
-            
             for (int linhaB = 0; linhaB < LB; linhaB++) {
                 //variavel auxiliar para armazenar valor temporário
-                //para posteriormente adicionar a matriz resultado    
-                int aux =0;
-                //laço para multiplicar os valores
-                for (int x = 0; x < LA; x++) {
-                    aux = aux + (A[linhaB][x] * B[x][colunaB]);
-                    
-                }
-                resultado[linhaB][colunaB] = aux;
+                //para posteriormente adicionar a matriz resultado   
+
+                //Multiplicar m = new ThreadMultiplicar(linhaB, colunaB, LA);
+                //new Thread(m).start();
+                thr[x] = new Thread(new ThreadMultiplicar(linhaB, colunaB, LA,x+1));  
+                x++;
             }
         }
+        
+        
+            
+        for (int i = 0; i < nThreads; ++i) {  
+            thr[i].start();  
+        }  
+          
+        for (int i = 0; i < nThreads; ++i) {  
+            try {
+		thr[i].join();
+		} 
+		catch (InterruptedException ex) {
+			ex.printStackTrace();
+		}  
+        }  
+        System .out .println ("All threads stopped. Exiting...");  
+        
+        
+        
+        
+        
+        
         // </editor-fold>  
-    
-        // <editor-fold defaultstate="collapsed" desc="Imprimir matriz resultado">  
+        
+    // <editor-fold defaultstate="collapsed" desc="Imprimir matriz resultado">  
         for(int l=0; l<LA;l++){
             for(int c=0; c<CB; c++){
-                System.err.print(resultado[l][c] +"|");
+                System.err.print(Matriz.getResultado(l,c) +"|");
             }
             System.err.println("");
         }
         // </editor-fold>  
-
     }
+    
+    public static void escrever(String msg){
+        System.out.println(msg);
+    }
+           
+
 }
