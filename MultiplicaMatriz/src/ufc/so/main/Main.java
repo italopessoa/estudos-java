@@ -1,6 +1,6 @@
 package ufc.so.main;
 
-import ufc.so.gui.data.MatrizFileRead;
+import ufc.so.gui.data.MatrizFileManager;
 import ufc.so.gui.xml.XMLFileProperties;
 import ufc.so.thread.ThreadMultiplicar;
 
@@ -20,9 +20,9 @@ public class Main {
 
         Matriz.iniciarMatrizes(LA, CA, LB, CB);
 
-        MatrizFileRead mfr = new MatrizFileRead();
-        int[][] a = mfr.readMatriz(XMLFileProperties.filePathMatriz3x3);
-        int[][] b = mfr.readMatriz(XMLFileProperties.filePathMatriz3x2);
+        MatrizFileManager mfr = new MatrizFileManager();
+        int[][] a = null;// = mfr.readMatriz(XMLFileProperties.filePathMatriz3x3);
+        int[][] b = null;// = mfr.readMatriz(XMLFileProperties.filePathMatriz3x2);
         
         Matriz.cloneMatrizA(a);
         Matriz.cloneMatrizB(b);
