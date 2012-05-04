@@ -7,6 +7,7 @@ package ufc.so.gui;
 
 import java.awt.Cursor;
 import java.io.File;
+import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -116,7 +117,6 @@ public class jfrmPrincipal extends javax.swing.JFrame {
                     .addComponent(jLabel3)
                     .addComponent(jLabel1)
                     .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(11, 11, 11)
@@ -240,7 +240,7 @@ public class jfrmPrincipal extends javax.swing.JFrame {
         int l = Integer.parseInt(jtxtLinhasMatriz.getText());
         int c = Integer.parseInt(jtxtColunasMatriz.getText());
         
-        m.generateMatrizXML(gerarMatriz(l, c),l, c, "/home/italoney/NetBeansProjects/matrizes/"+l+"x"+c+".xml");
+        m.generateMatrizXML(gerarMatriz(l, c),l, c, "/home/italopessoa/"+l+"x"+c+".xml");
     }//GEN-LAST:event_jbtnGerarMatrizActionPerformed
 
     /**
@@ -310,7 +310,7 @@ public class jfrmPrincipal extends javax.swing.JFrame {
         String matrizFileA = this.aplicarRegex(this.jtxtPathMA.getText());
         String matrizFileB = this.aplicarRegex(this.jtxtPathMB.getText());
         
-        int linhaA = 0, linhaB = 0,colunaA = 0, colunaB = 0;
+        int linhaA, linhaB,colunaA, colunaB;
 
         //Escoler tipo de matriz
 
@@ -397,7 +397,8 @@ public class jfrmPrincipal extends javax.swing.JFrame {
      * @param matriz 
      */
     private void selectMatrizFile(String matriz){
-        JFileChooser fc = new JFileChooser("/home/italoney/NetBeansProjects/matrizes");
+        JFileChooser fc = new JFileChooser("/home/italoney");
+        fc.setDialogTitle("Selecione o arquivo que contém a matriz");
         fc.showDialog(this, "Ok");
         File f = fc.getSelectedFile();
         

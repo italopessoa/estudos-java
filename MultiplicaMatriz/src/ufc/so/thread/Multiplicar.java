@@ -58,7 +58,7 @@ public class Multiplicar {
 
         // <editor-fold defaultstate="collapsed" desc="ThreadMultiplicar matrizes">  
         for (int colunaB = 0; colunaB < this.CB; colunaB++) {
-            for (int linhaB = 0; linhaB < this.LB; linhaB++) {
+            for (int linhaB = 0; linhaB < this.LA; linhaB++) {
                 thread[threadAtual] = new Thread(new ThreadMultiplicar(linhaB, colunaB, this.LA, threadAtual + 1));
                 threadAtual++;
             }
@@ -83,7 +83,7 @@ public class Multiplicar {
         jfrmPrincipal.logThreadStatus("Tempo total com thread:"+t0/1000000+"\n");
 
         MatrizFileManager mfm = new MatrizFileManager();
-        mfm.generateMatrizXML(a, LA, CB, "/home/italoney/NetBeansProjects/matrizes/resultado-"+LA+"x"+CB+".xml");
+        mfm.generateMatrizXML(a, LA, CB, "/home/italopessoa/NetBeansProjects/matrizes/resultado-"+LA+"x"+CB+".xml");
         // </editor-fold>  
     }
 
@@ -106,10 +106,10 @@ public class Multiplicar {
         
         // <editor-fold defaultstate="collapsed" desc="ThreadMultiplicar matrizes">  
         for (int colunaB = 0; colunaB < this.CB; colunaB++) {
-            for (int linhaB = 0; linhaB < this.LB; linhaB++) {
+            for (int linhaB = 0; linhaB < this.LA; linhaB++) {
             int aux = 0;
             //laço para multiplicar os valores
-                for (int x = 0; x < this.LA; x++) {
+                for (int x = 0; x < this.CB; x++) {
                     aux = aux + (Matriz.getA(linhaB, x) * Matriz.getB(x, colunaB));
                 }
         
@@ -120,6 +120,6 @@ public class Multiplicar {
         jfrmPrincipal.logThreadStatus("Tempo total semm thread:"+t0/1000000+"\n");
 
         MatrizFileManager mfm = new MatrizFileManager();
-        mfm.generateMatrizXML(a, LA, CB, "/home/italoney/NetBeansProjects/matrizes/resultado-"+LA+"x"+CB+".xml");
+        mfm.generateMatrizXML(a, LA, CB, "/home/italopessoa/NetBeansProjects/matrizes/resultado-"+LA+"x"+CB+".xml");
     }
 }

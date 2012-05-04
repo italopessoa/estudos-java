@@ -30,7 +30,7 @@ public class Matriz {
      * @return A[linha][coluna];
      */
     public static int getA(int linha, int coluna) {
-        return A[linha][coluna];
+            return A[linha][coluna];
     }
 
     /**
