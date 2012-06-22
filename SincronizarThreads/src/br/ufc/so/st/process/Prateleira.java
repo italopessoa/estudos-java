@@ -15,6 +15,7 @@ public class Prateleira {
     private Queue<Integer> prateleira;
     private int qtdProdutos;
     private  SimpleDateFormat formater;
+    private String auxWarning = "----------------------";
     
     /**
      * 
@@ -33,15 +34,22 @@ public class Prateleira {
     public synchronized int getProduto(int numero){
         while(this.prateleira.isEmpty()){
             try{
-                //aguardar o produto ser posto na prateleira
-                
-                String warning = this.getTime() + " - Consumidor Nº"+numero+" "
-                        + "PRATELEIRA VAZIA!" + " - ("+this.prateleira.size() 
-                        + ","+ this.qtdProdutos+")";
+                // <editor-fold defaultstate="collapsed" desc="Código não utilizado">
+//                String warning = this.getTime() + " - Consumidor Nº"+numero+" "
+//                        + "PRATELEIRA VAZIA!" + " - ("+this.prateleira.size() 
+//                        + ","+ this.qtdProdutos+")";
                 
                 //sincronizarthreads.SincronizarThreads.addLog(warning);
                 //System.err.println(this.getTime() + " - Consumidor Nº"+numero+" PRATELEIRA VAZIA!" + " - ("+this.prateleira.size() + ","+ this.qtdProdutos+")");
-                System.err.println(warning);
+//                System.err.println(warning);
+//                System.err.println(this.getTime() + " - Consumidor Nº"+numero+" "
+//                        + "PRATELEIRA VAZIA!" + " - ("+this.prateleira.size() 
+//                        + ","+ this.qtdProdutos+")");
+                
+                // </editor-fold>
+                
+                //aguardar o produto ser posto na prateleira
+                System.err.println(this.auxWarning + " Consumidor Nº"+numero+" BUFFER VAZIO "+this.auxWarning);
                 wait();
             }catch (InterruptedException ex) {
             }
@@ -49,11 +57,18 @@ public class Prateleira {
         
         notifyAll();
         int valor = this.prateleira.poll();
+        
+        // <editor-fold defaultstate="collapsed" desc="Código não utilizado">
 //        String log = this.getTime() + " - Consumidor Nº"+numero+ " compra produto: "
 //                +valor+ " - ("+this.prateleira.size() + ","+ this.qtdProdutos+")";
 //        SincronizarThreads.addLog(log);
         //System.out.println(this.getTime() + " - Consumidor Nº"+numero+ " compra produto: "+valor+ " - ("+this.prateleira.size() + ","+ this.qtdProdutos+")");
         //System.out.println(log);
+        //System.out.println(this.getTime() + " - Consumidor Nº"+numero+ " compra produto: "
+          //      +valor+ " - ("+this.prateleira.size() + ","+ this.qtdProdutos+")");
+        // </editor-fold>
+        
+             System.out.println("Consumidor Nº"+numero+ " compra produto: "+valor);
         return valor;
     }
     
@@ -65,23 +80,39 @@ public class Prateleira {
     public synchronized void putProduto(int produto, int numero){
         while(this.prateleira.size() == this.qtdProdutos){
             try{
-                //aguardar o produto ser removido da prateleira
-                String warning = this.getTime() + " - Produtor Nº"+numero 
-                        +" PRATELEIRA CHEIA!" + " - ("+this.prateleira.size() 
-                        + ","+ this.qtdProdutos+")";
+                // <editor-fold defaultstate="collapsed" desc="Código não utilizado">
+                
+//                String warning = this.getTime() + " - Produtor Nº"+numero 
+//                        +" PRATELEIRA CHEIA!" + " - ("+this.prateleira.size() 
+//                        + ","+ this.qtdProdutos+")";
                 //System.err.println(this.getTime() + " - Produtor Nº"+numero +" PRATELEIRA CHEIA!" + " - ("+this.prateleira.size() + ","+ this.qtdProdutos+")");
                 //SincronizarThreads.addLog(warning);
-                System.err.println(warning);
+                //System.err.println(warning);
+//                System.err.println(this.getTime() + " - Produtor Nº"+numero 
+//                        +" PRATELEIRA CHEIA!" + " - ("+this.prateleira.size() 
+//                        + ","+ this.qtdProdutos+")");
+                
+                // </editor-fold>
+                
+                //aguardar o produto ser removido da prateleira
+                System.err.println(this.auxWarning + " Produtor Nº"+numero +" BUFFER CHEIO "+this.auxWarning);
                 wait();
             }catch(InterruptedException ex){
             }
         }
         this.prateleira.offer(produto);
+        
+        // <editor-fold defaultstate="collapsed" desc="Código não utilizado">
 //        String log = this.getTime() + " - Produtor Nº"+numero +" repõe produto: "
 //                + ""+produto + " - ("+this.prateleira.size() + ","+ this.qtdProdutos+")";
         //System.out.println(this.getTime() + " - Produtor Nº"+numero +" repõe produto: "+produto + " - ("+this.prateleira.size() + ","+ this.qtdProdutos+")");
         //SincronizarThreads.addLog(log);
         //System.out.println(log);
+        //System.out.println(this.getTime() + " - Produtor Nº"+numero +" repõe produto: "
+          //      + ""+produto + " - ("+this.prateleira.size() + ","+ this.qtdProdutos+")");
+        // </editor-fold>
+        
+        System.out.println("Produtor Nº"+numero +" repõe produto: "+produto);
         notifyAll();
     }
     

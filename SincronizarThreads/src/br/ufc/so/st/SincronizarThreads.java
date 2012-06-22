@@ -34,15 +34,40 @@ public class SincronizarThreads {
         Consumidor consumidor3 = new Consumidor(prateleira, qtdProdutos,3);
         Consumidor consumidor4 = new Consumidor(prateleira, qtdProdutos,4);
         
-        produtor.start();
-        produtor2.start();
-        //produtor3.start();
-        //produtor4.start();
+        int j = 0;
+        //disparar produtores
+        for(int i = 0; i<3;i++){
+            Produtor p = new Produtor(prateleira,qtdProdutos,i+1);
+            p.start();
+            
+            //disparar consumidores
+            for(j = 0; j<3;j++){
+                Consumidor c = new Consumidor(prateleira, qtdProdutos,j+1);    
+                c.start();
+                break;
+            }
+        }
+               
+//        produtor.start();
+//        consumidor.start();
+//        produtor2.start();
+//        consumidor2.start();
+//        produtor3.start();
+//        consumidor3.start();
+//        produtor4.start();
+//        consumidor4.start();
         
-        consumidor.start();
-        consumidor2.start();
-        //consumidor3.start();
-        //consumidor4.start();
+        
+//        produtor.start();
+//        produtor2.start();
+//        produtor3.start();
+//        produtor4.start();
+//        consumidor.start();
+//        consumidor2.start();
+//        consumidor3.start();
+//        consumidor4.start();
+        
+        
     }
     
     public static void addLog(String log){

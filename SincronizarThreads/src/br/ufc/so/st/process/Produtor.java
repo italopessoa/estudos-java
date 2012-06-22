@@ -10,7 +10,7 @@ import java.util.logging.Logger;
  */
 public class Produtor extends Thread{
     private Prateleira prateleira;
-    private int numero;
+    private int numero;    
     
     /**
      * 
