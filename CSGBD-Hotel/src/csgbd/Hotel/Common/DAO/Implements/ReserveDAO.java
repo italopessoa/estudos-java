@@ -22,7 +22,6 @@ import java.util.logging.Logger;
 public class ReserveDAO implements IDAO<Reserve> {
 
     //<editor-fold defaultstate="collapsed" desc="IDAO Members">  
-    
     @Override
     public void Save(Reserve reserve) {
         try {
@@ -157,13 +156,13 @@ public class ReserveDAO implements IDAO<Reserve> {
 
             if (indexMap.containsKey("dtEntry")) {
                 ps.setDate(indexMap.get("dtEntry"), java.sql.Date.valueOf(String.format("%3$d-%2$d-%1$d",
-                    reserve.getEntryDate().getDate(), reserve.getEntryDate().getMonth(), reserve.getEntryDate().getYear() + 1900)));
+                        reserve.getEntryDate().getDate(), reserve.getEntryDate().getMonth(), reserve.getEntryDate().getYear() + 1900)));
             }
 
             if (indexMap.containsKey("dtOut")) {
                 ps.setDate(indexMap.get("dtOut"), java.sql.Date.valueOf(String.format("%3$d-%2$d-%1$d",
-                    reserve.getOutDate().getDate(), reserve.getOutDate().getMonth(), reserve.getOutDate().getYear() + 1900)));
-                        
+                        reserve.getOutDate().getDate(), reserve.getOutDate().getMonth(), reserve.getOutDate().getYear() + 1900)));
+
             }
 
             Date actualDate = new Date();
@@ -179,4 +178,104 @@ public class ReserveDAO implements IDAO<Reserve> {
     }
 
     // </editor-fold>
+    
+    public ArrayList<Reserve> SelectReserveByGuest(Guest guestValue) {
+        ArrayList<Reserve> reserves = new ArrayList<Reserve>();
+        String sql_str = "SELECT * FROM reserve re "
+                + "inner join room ro on ro.idroom = re.roomid "
+                + "inner join guest g on g.idguest = re.guestid "
+                + "inner join roomtype rt on rt.idroomtype = ro.roomtype "
+                + " and re.guestid = " + guestValue.getId();
+        Reserve reserve;
+        Room room;
+        Guest guest;
+        try {
+            ResultSet rs = ConnectionManager.GetStatement().executeQuery(sql_str);
+            while (rs.next()) {
+
+                reserve = new Reserve(rs.getInt(1));
+                reserve.setEntryDate(rs.getDate(4));
+                reserve.setOutDate(rs.getDate(5));
+                reserve.setDtCadastre(rs.getDate(6));
+                reserve.setDtUpdate(rs.getDate(7));
+
+                room = new Room(rs.getInt(8));
+                room.setPrice(rs.getDouble(9));
+                room.setDtCadastre(rs.getDate(11));
+                room.setDtUpdate(rs.getDate(12));
+
+                guest = new Guest(rs.getInt(13));
+                guest.setName(rs.getString(14));
+                guest.setAge(rs.getInt(15));
+                guest.setEmail(rs.getString(16));
+                guest.setPhone(rs.getString(17));
+                guest.setDtCadastre(rs.getDate(18));
+                guest.setDtUpdate(rs.getDate(19));
+
+                RoomType roomType = new RoomType(rs.getInt(20));
+                roomType.setName(rs.getString(21));
+                roomType.setDtCadastre(rs.getDate(22));
+                roomType.setDtUpdate(rs.getDate(23));
+
+                room.setType(roomType);
+                reserve.setRoom(room);
+                reserve.setGuest(guest);
+
+                reserves.add(reserve);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(RoomTypeDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return reserves;
+    }
+    
+    public ArrayList<Reserve> SelectReserveByRoom(Room roomValue) {
+        ArrayList<Reserve> reserves = new ArrayList<Reserve>();
+        String sql_str = "SELECT * FROM reserve re "
+                + "inner join room ro on ro.idroom = re.roomid "
+                + "inner join guest g on g.idguest = re.guestid "
+                + "inner join roomtype rt on rt.idroomtype = ro.roomtype "
+                + " and re.roomid = " + roomValue.getId();
+        Reserve reserve;
+        Room room;
+        Guest guest;
+        try {
+            ResultSet rs = ConnectionManager.GetStatement().executeQuery(sql_str);
+            while (rs.next()) {
+
+                reserve = new Reserve(rs.getInt(1));
+                reserve.setEntryDate(rs.getDate(4));
+                reserve.setOutDate(rs.getDate(5));
+                reserve.setDtCadastre(rs.getDate(6));
+                reserve.setDtUpdate(rs.getDate(7));
+
+                room = new Room(rs.getInt(8));
+                room.setPrice(rs.getDouble(9));
+                room.setDtCadastre(rs.getDate(11));
+                room.setDtUpdate(rs.getDate(12));
+
+                guest = new Guest(rs.getInt(13));
+                guest.setName(rs.getString(14));
+                guest.setAge(rs.getInt(15));
+                guest.setEmail(rs.getString(16));
+                guest.setPhone(rs.getString(17));
+                guest.setDtCadastre(rs.getDate(18));
+                guest.setDtUpdate(rs.getDate(19));
+
+                RoomType roomType = new RoomType(rs.getInt(20));
+                roomType.setName(rs.getString(21));
+                roomType.setDtCadastre(rs.getDate(22));
+                roomType.setDtUpdate(rs.getDate(23));
+
+                room.setType(roomType);
+                reserve.setRoom(room);
+                reserve.setGuest(guest);
+
+                reserves.add(reserve);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(RoomTypeDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return reserves;
+    }
 }

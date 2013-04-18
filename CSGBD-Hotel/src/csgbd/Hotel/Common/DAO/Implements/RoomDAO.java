@@ -127,4 +127,36 @@ public class RoomDAO implements IDAO<Room> {
     }
 
     // </editor-fold>
+    
+    public ArrayList<Room> SelectRoomsByType(RoomType roomType){
+        ArrayList<Room> rooms = new ArrayList<Room>();
+        
+        String sql_str = "SELECT * FROM room r "
+                + "inner join roomtype rt on rt.idroomtype = r.roomtype "
+                + "where r.roomtype = "+roomType.getId();
+        Room room;
+        RoomType type;
+        try {
+            ResultSet rs = ConnectionManager.GetStatement().executeQuery(sql_str);
+            while (rs.next()) {
+                room = new Room();
+                room.setId(rs.getInt(1));
+                room.setPrice(rs.getDouble(2));
+                room.setDtCadastre(rs.getDate(4));
+                room.setDtUpdate(rs.getDate(5));
+
+                type = new RoomType(rs.getInt(6));
+                type.setName(rs.getString(7));
+                type.setDtCadastre(rs.getDate(8));
+                type.setDtUpdate(rs.getDate(9));
+
+                room.setType(type);
+                rooms.add(room);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(RoomTypeDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return  rooms;
+    }
 }
