@@ -7,7 +7,6 @@ package csgbd.Hotel.Common.DAO.Implements;
 import csgbd.Hotel.Common.DAO.IDAO;
 import csgbd.Hotel.Common.DB.ConnectionManager;
 import csgbd.Hotel.Common.Entity.Guest;
-import csgbd.Hotel.Common.Entity.RoomType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
