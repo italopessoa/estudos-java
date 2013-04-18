@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package csgbd.Hotel.Common.DAO.Implements;
 
 import csgbd.Hotel.Common.DAO.IDAO;
@@ -25,6 +21,8 @@ import java.util.logging.Logger;
  */
 public class ReserveDAO implements IDAO<Reserve> {
 
+    //<editor-fold defaultstate="collapsed" desc="IDAO Members">  
+    
     @Override
     public void Save(Reserve reserve) {
         try {
@@ -174,4 +172,6 @@ public class ReserveDAO implements IDAO<Reserve> {
             Logger.getLogger(RoomTypeDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    // </editor-fold>
 }

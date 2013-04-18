@@ -18,6 +18,8 @@ import java.util.logging.Logger;
  */
 public class RoomTypeDAO implements IDAO<RoomType> {
 
+    //<editor-fold defaultstate="collapsed" desc="IDAO Members">  
+    
     @Override
     public void Save(RoomType object) {
         RoomType roomType;
@@ -111,4 +113,6 @@ public class RoomTypeDAO implements IDAO<RoomType> {
             Logger.getLogger(RoomTypeDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    // </editor-fold>
 }

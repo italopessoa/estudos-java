@@ -19,6 +19,8 @@ import java.util.logging.Logger;
  */
 public class RoomDAO implements IDAO<Room> {
 
+    //<editor-fold defaultstate="collapsed" desc="IDAO Members">  
+    
     @Override
     public void Save(Room room) {
         try {
@@ -123,4 +125,6 @@ public class RoomDAO implements IDAO<Room> {
             Logger.getLogger(RoomTypeDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    // </editor-fold>
 }
