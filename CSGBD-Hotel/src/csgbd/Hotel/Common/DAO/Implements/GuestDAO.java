@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package csgbd.Hotel.Common.DAO.Implements;
 
 import csgbd.Hotel.Common.DAO.IDAO;
@@ -13,8 +9,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,6 +18,8 @@ import java.util.logging.Logger;
  */
 public class GuestDAO implements IDAO<Guest> {
 
+    //<editor-fold defaultstate="collapsed" desc="IDAO Members">  
+    
     @Override
     public void Save(Guest guest) {
         try {
@@ -143,4 +139,6 @@ public class GuestDAO implements IDAO<Guest> {
             Logger.getLogger(RoomTypeDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    // </editor-fold>
 }
