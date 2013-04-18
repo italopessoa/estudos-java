@@ -15,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -114,24 +115,62 @@ public class ReserveDAO implements IDAO<Reserve> {
     @Override
     public void Update(Reserve reserve) {
         try {
+            
+            HashMap<String, Integer> indexMap = new HashMap<String, Integer>();
+            int auxCount = 2;
+            StringBuilder sb = new StringBuilder("update reserve set dtupdate=? ");
+            
+            if(reserve.getGuest() != null && reserve.getGuest().getId() >0){
+                indexMap.put("guestid", auxCount);
+                sb.append(" ,guestid=? ");
+                auxCount++;
+            }
+            
+            if(reserve.getRoom()!= null && reserve.getRoom().getId() >0){
+                indexMap.put("roomid", auxCount);
+                sb.append(" ,roomid=? ");
+                auxCount++;
+            }
+            
+            if(reserve.getEntryDate()!= null){
+                indexMap.put("dtEntry", auxCount);
+                sb.append(" ,dtEntry=? ");
+                auxCount++;
+            }
+            
+            if(reserve.getOutDate()!= null){
+                indexMap.put("dtOut", auxCount);
+                sb.append(" ,dtOut=? ");
+                auxCount++;
+            }
+            
+            indexMap.put("idreserve", auxCount);
+            sb.append(" where idreserve = ? " );
+            
             String query = "update reserve set guestid=?,roomid=?,dtEntry=?,dtOut=?,dtupdate=? "
                     + "where idreserve = ?;";
             PreparedStatement ps = ConnectionManager.PreparedStatement(query);
-            ps.setInt(1, reserve.getGuest().getId());
-            ps.setInt(2, reserve.getRoom().getId());
+            
+            
+            if(indexMap.containsKey("guestid")){
+                ps.setInt(indexMap.get("guestid"), reserve.getGuest().getId());
+            }
+            
+            if(indexMap.containsKey("roomid")){
+                ps.setInt(indexMap.get("roomid"), reserve.getRoom().getId());
+            }
+            
+            if(indexMap.containsKey("dtEntry")){
+                ps.setDate(indexMap.get("dtEntry"), (java.sql.Date)reserve.getEntryDate());
+            }
+            
+            if(indexMap.containsKey("dtOut")){
+                ps.setDate(indexMap.get("dtOut"), (java.sql.Date)reserve.getEntryDate());
+            }
+            
+            ps.setDate(1, (java.sql.Date) new Date());
 
-            ps.setDate(3, java.sql.Date.valueOf(String.format("%3$d-%2$d-%1$d",
-                    reserve.getEntryDate().getDate(), reserve.getEntryDate().getMonth(),
-                    reserve.getEntryDate().getYear() + 1900)));
-
-            ps.setDate(4, java.sql.Date.valueOf(String.format("%3$d-%2$d-%1$d",
-                    reserve.getOutDate().getDate(), reserve.getOutDate().getMonth(), reserve.getOutDate().getYear() + 1900)));
-
-            Date actualDate = new Date();
-            ps.setDate(5, java.sql.Date.valueOf(String.format("%3$d-%2$d-%1$d",
-                    actualDate.getDate(), actualDate.getMonth(), actualDate.getYear() + 1900)));
-
-            ps.setInt(6, reserve.getId());
+            ps.setInt(indexMap.get("idreserve"), reserve.getId());
 
             ps.executeUpdate();
         } catch (SQLException ex) {
