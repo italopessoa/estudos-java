@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -80,17 +81,43 @@ public class RoomDAO implements IDAO<Room> {
     @Override
     public void Update(Room room) {
         try {
-            String query = "update room set roomprice=?,roomtype=?,dtUpdate=?"
-                    + " where idroom = ?;";
-            PreparedStatement ps = ConnectionManager.PreparedStatement(query);
-            ps.setDouble(1, room.getPrice());
-            ps.setDouble(2, room.getType().getId());
+
+            HashMap<String, Integer> indexMap = new HashMap<String, Integer>();
+            int auxCount = 2;
+
+            StringBuilder sb = new StringBuilder("update room set dtUpdate=? ");
+
+
+            if (room.getPrice() > 0) {
+                indexMap.put("roomprice", auxCount);
+                sb.append(" ,roomprice=? ");
+                auxCount++;
+            }
+
+            if (room.getType() != null && room.getType().getId() > 0) {
+                indexMap.put("roomtype", auxCount);
+                sb.append(" ,roomtype=? ");
+                auxCount++;
+            }
+
+            sb.append(" where idroom=?;");
+            indexMap.put("idroom", auxCount);
+
+            PreparedStatement ps = ConnectionManager.PreparedStatement(sb.toString());
+
+            if (indexMap.containsKey("roomprice")) {
+                ps.setDouble(indexMap.get("roomprice"), room.getPrice());
+            }
+
+            if (indexMap.containsKey("roomtype")) {
+                ps.setInt(indexMap.get("roomtype"), room.getType().getId());
+            }
 
             Date actualDate = new Date();
-            ps.setDate(3, java.sql.Date.valueOf(String.format("%3$d-%2$d-%1$d",
+            ps.setDate(1, java.sql.Date.valueOf(String.format("%3$d-%2$d-%1$d",
                     actualDate.getDate(), actualDate.getMonth(), actualDate.getYear() + 1900)));
 
-            ps.setDouble(4, room.getId());
+            ps.setInt(indexMap.get("idroom"), room.getId());
             ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(RoomTypeDAO.class.getName()).log(Level.SEVERE, null, ex);

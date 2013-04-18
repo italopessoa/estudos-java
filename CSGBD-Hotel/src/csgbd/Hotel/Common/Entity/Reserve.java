@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package csgbd.Hotel.Common.Entity;
 
 import java.util.Date;
@@ -11,6 +7,7 @@ import java.util.Date;
  * @author italopessoa
  */
 public class Reserve {
+
     private int id;
     private Guest guest;
     private Room room;
