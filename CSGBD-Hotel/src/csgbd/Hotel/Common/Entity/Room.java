@@ -7,6 +7,7 @@ import java.util.Date;
  * @author italopessoa
  */
 public class Room {
+
     private int id;
     private double price;
     private RoomType type;

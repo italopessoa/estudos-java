@@ -7,6 +7,7 @@ import java.util.Date;
  * @author italopessoa
  */
 public class Guest {
+
     private int id;
     private String name;
     private int age;
@@ -14,10 +15,10 @@ public class Guest {
     private String phone;
     private Date dtCadastre;
     private Date dtUpdate;
-    
+
     public Guest() {
     }
-    
+
     public Guest(int id) {
         this.id = id;
     }
@@ -37,7 +38,7 @@ public class Guest {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-    
+
     public int getId() {
         return id;
     }
@@ -77,6 +78,4 @@ public class Guest {
     public void setDtUpdate(Date dtUpdate) {
         this.dtUpdate = dtUpdate;
     }
-
-    
 }
