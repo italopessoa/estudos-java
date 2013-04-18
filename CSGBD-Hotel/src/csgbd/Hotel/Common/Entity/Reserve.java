@@ -16,6 +16,15 @@ public class Reserve {
     private Room room;
     private Date entryDate;
     private Date outDate;
+    private Date dtCadastre;
+    private Date dtUpdate;
+
+    public Reserve() {
+    }
+
+    public Reserve(int id) {
+        this.id = id;
+    }
 
     public int getId() {
         return id;
@@ -55,5 +64,21 @@ public class Reserve {
 
     public void setOutDate(Date outDate) {
         this.outDate = outDate;
+    }
+
+    public Date getDtCadastre() {
+        return dtCadastre;
+    }
+
+    public void setDtCadastre(Date dtCadastre) {
+        this.dtCadastre = dtCadastre;
+    }
+
+    public Date getDtUpdate() {
+        return dtUpdate;
+    }
+
+    public void setDtUpdate(Date dtUpdate) {
+        this.dtUpdate = dtUpdate;
     }
 }

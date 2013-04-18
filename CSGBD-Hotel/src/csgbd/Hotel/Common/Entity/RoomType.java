@@ -10,7 +10,8 @@ public class RoomType {
     private int id;
     private String name;
     private Date dtCadastre;
-
+    private Date dtUpdate;
+    
     public RoomType() {
     }
 
@@ -41,4 +42,13 @@ public class RoomType {
     public void setName(String name) {
         this.name = name;
     }
+    
+    public Date getDtUpdate() {
+        return dtUpdate;
+    }
+
+    public void setDtUpdate(Date dtUpdate) {
+        this.dtUpdate = dtUpdate;
+    }
+
 }
