@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  *
  * @author italopessoa
  */
-public class ReserveDAO implements IDAO<Reserve>{
+public class ReserveDAO implements IDAO<Reserve> {
 
     @Override
     public void Save(Reserve reserve) {
@@ -32,17 +32,17 @@ public class ReserveDAO implements IDAO<Reserve>{
             PreparedStatement ps = ConnectionManager.PreparedStatement(query);
             ps.setInt(1, reserve.getGuest().getId());
             ps.setInt(2, reserve.getRoom().getId());
-            ps.setDate(3, java.sql.Date.valueOf(String.format("%3$d-%2$d-%1$d", 
-                    reserve.getEntryDate().getDate(),reserve.getEntryDate().getMonth(),
-                    reserve.getEntryDate().getYear()+1900)));
-            
-            ps.setDate(4, java.sql.Date.valueOf(String.format("%3$d-%2$d-%1$d", 
-                    reserve.getOutDate().getDate(),reserve.getOutDate().getMonth(),reserve.getOutDate().getYear()+1900)));
-            
+            ps.setDate(3, java.sql.Date.valueOf(String.format("%3$d-%2$d-%1$d",
+                    reserve.getEntryDate().getDate(), reserve.getEntryDate().getMonth(),
+                    reserve.getEntryDate().getYear() + 1900)));
+
+            ps.setDate(4, java.sql.Date.valueOf(String.format("%3$d-%2$d-%1$d",
+                    reserve.getOutDate().getDate(), reserve.getOutDate().getMonth(), reserve.getOutDate().getYear() + 1900)));
+
             Date actualDate = new Date();
-            ps.setDate(5, java.sql.Date.valueOf(String.format("%3$d-%2$d-%1$d", 
-                    actualDate.getDate(),actualDate.getMonth(),actualDate.getYear()+1900)));
-            
+            ps.setDate(5, java.sql.Date.valueOf(String.format("%3$d-%2$d-%1$d",
+                    actualDate.getDate(), actualDate.getMonth(), actualDate.getYear() + 1900)));
+
             ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(RoomTypeDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -73,19 +73,19 @@ public class ReserveDAO implements IDAO<Reserve>{
         Guest guest;
         try {
             ResultSet rs = ConnectionManager.GetStatement().executeQuery(sql_str);
-            while(rs.next()){
-                
+            while (rs.next()) {
+
                 reserve = new Reserve(rs.getInt(1));
                 reserve.setEntryDate(rs.getDate(4));
                 reserve.setOutDate(rs.getDate(5));
                 reserve.setDtCadastre(rs.getDate(6));
                 reserve.setDtUpdate(rs.getDate(7));
-                
+
                 room = new Room(rs.getInt(8));
                 room.setPrice(rs.getDouble(9));
                 room.setDtCadastre(rs.getDate(11));
                 room.setDtUpdate(rs.getDate(12));
-                
+
                 guest = new Guest(rs.getInt(13));
                 guest.setName(rs.getString(14));
                 guest.setAge(rs.getInt(15));
@@ -93,16 +93,16 @@ public class ReserveDAO implements IDAO<Reserve>{
                 guest.setPhone(rs.getString(17));
                 guest.setDtCadastre(rs.getDate(18));
                 guest.setDtUpdate(rs.getDate(19));
-                
+
                 RoomType roomType = new RoomType(rs.getInt(20));
                 roomType.setName(rs.getString(21));
                 roomType.setDtCadastre(rs.getDate(22));
                 roomType.setDtUpdate(rs.getDate(23));
-                
+
                 room.setType(roomType);
                 reserve.setRoom(room);
                 reserve.setGuest(guest);
-                
+
                 reserves.add(reserve);
             }
         } catch (SQLException ex) {
@@ -119,20 +119,20 @@ public class ReserveDAO implements IDAO<Reserve>{
             PreparedStatement ps = ConnectionManager.PreparedStatement(query);
             ps.setInt(1, reserve.getGuest().getId());
             ps.setInt(2, reserve.getRoom().getId());
-            
-            ps.setDate(3, java.sql.Date.valueOf(String.format("%3$d-%2$d-%1$d", 
-                    reserve.getEntryDate().getDate(),reserve.getEntryDate().getMonth(),
-                    reserve.getEntryDate().getYear()+1900)));
-            
-            ps.setDate(4, java.sql.Date.valueOf(String.format("%3$d-%2$d-%1$d", 
-                    reserve.getOutDate().getDate(),reserve.getOutDate().getMonth(),reserve.getOutDate().getYear()+1900)));
-            
+
+            ps.setDate(3, java.sql.Date.valueOf(String.format("%3$d-%2$d-%1$d",
+                    reserve.getEntryDate().getDate(), reserve.getEntryDate().getMonth(),
+                    reserve.getEntryDate().getYear() + 1900)));
+
+            ps.setDate(4, java.sql.Date.valueOf(String.format("%3$d-%2$d-%1$d",
+                    reserve.getOutDate().getDate(), reserve.getOutDate().getMonth(), reserve.getOutDate().getYear() + 1900)));
+
             Date actualDate = new Date();
-            ps.setDate(5, java.sql.Date.valueOf(String.format("%3$d-%2$d-%1$d", 
-                    actualDate.getDate(),actualDate.getMonth(),actualDate.getYear()+1900)));
-            
+            ps.setDate(5, java.sql.Date.valueOf(String.format("%3$d-%2$d-%1$d",
+                    actualDate.getDate(), actualDate.getMonth(), actualDate.getYear() + 1900)));
+
             ps.setInt(6, reserve.getId());
-            
+
             ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(RoomTypeDAO.class.getName()).log(Level.SEVERE, null, ex);
