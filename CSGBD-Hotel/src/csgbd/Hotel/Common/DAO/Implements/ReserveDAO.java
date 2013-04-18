@@ -156,14 +156,19 @@ public class ReserveDAO implements IDAO<Reserve> {
             }
 
             if (indexMap.containsKey("dtEntry")) {
-                ps.setDate(indexMap.get("dtEntry"), (java.sql.Date) reserve.getEntryDate());
+                ps.setDate(indexMap.get("dtEntry"), java.sql.Date.valueOf(String.format("%3$d-%2$d-%1$d",
+                    reserve.getEntryDate().getDate(), reserve.getEntryDate().getMonth(), reserve.getEntryDate().getYear() + 1900)));
             }
 
             if (indexMap.containsKey("dtOut")) {
-                ps.setDate(indexMap.get("dtOut"), (java.sql.Date) reserve.getEntryDate());
+                ps.setDate(indexMap.get("dtOut"), java.sql.Date.valueOf(String.format("%3$d-%2$d-%1$d",
+                    reserve.getOutDate().getDate(), reserve.getOutDate().getMonth(), reserve.getOutDate().getYear() + 1900)));
+                        
             }
 
-            ps.setDate(1, (java.sql.Date) new Date());
+            Date actualDate = new Date();
+            ps.setDate(1, java.sql.Date.valueOf(String.format("%3$d-%2$d-%1$d",
+                    actualDate.getDate(), actualDate.getMonth(), actualDate.getYear() + 1900)));
 
             ps.setInt(indexMap.get("idreserve"), reserve.getId());
 

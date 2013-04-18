@@ -107,7 +107,10 @@ public class RoomTypeDAO implements IDAO<RoomType> {
                 ps.setInt(indexMap.get("idroomtype"), roomType.getId());
             }
 
-            ps.setDate(1, (java.sql.Date) new Date());
+            Date actualDate = new Date();
+            ps.setDate(1, java.sql.Date.valueOf(String.format("%3$d-%2$d-%1$d",
+                    actualDate.getDate(), actualDate.getMonth(), actualDate.getYear() + 1900)));
+            
             ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(RoomTypeDAO.class.getName()).log(Level.SEVERE, null, ex);
