@@ -81,33 +81,31 @@ public class RoomTypeDAO implements IDAO<RoomType> {
     @Override
     public void Update(RoomType roomType) {
         try {
-            
+
             HashMap<String, Integer> indexMap = new HashMap<String, Integer>();
             int auxCount = 2;
             StringBuilder sb = new StringBuilder("update roomtype set dtupdate=? ");
-            
-            if(roomType.getName()!= null && !roomType.getName().equals("")){
+
+            if (roomType.getName() != null && !roomType.getName().equals("")) {
                 indexMap.put("RoomTypeName", auxCount);
                 sb.append(" ,RoomTypeName = ? ");
                 auxCount++;
             }
-            
+
             indexMap.put("idroomtype", auxCount);
             sb.append(" where idroomtype = ? ");
-                
-            String query = "update roomtype set RoomTypeName = ?,DtUpdate = ? where idroomtype = ?;";
-            
+
             PreparedStatement ps = ConnectionManager.PreparedStatement(sb.toString());
-            
-            if(indexMap.containsKey("RoomTypeName")){
+
+            if (indexMap.containsKey("RoomTypeName")) {
                 ps.setString(indexMap.get("RoomTypeName"), roomType.getName());
             }
-            
-            if(indexMap.containsKey("idroomtype")){
+
+            if (indexMap.containsKey("idroomtype")) {
                 ps.setInt(indexMap.get("idroomtype"), roomType.getId());
             }
-            
-            ps.setDate(1, (java.sql.Date)new Date());
+
+            ps.setDate(1, (java.sql.Date) new Date());
             ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(RoomTypeDAO.class.getName()).log(Level.SEVERE, null, ex);

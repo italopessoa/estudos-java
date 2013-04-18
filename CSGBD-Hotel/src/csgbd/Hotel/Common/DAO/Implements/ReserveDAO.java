@@ -115,59 +115,56 @@ public class ReserveDAO implements IDAO<Reserve> {
     @Override
     public void Update(Reserve reserve) {
         try {
-            
+
             HashMap<String, Integer> indexMap = new HashMap<String, Integer>();
             int auxCount = 2;
             StringBuilder sb = new StringBuilder("update reserve set dtupdate=? ");
-            
-            if(reserve.getGuest() != null && reserve.getGuest().getId() >0){
+
+            if (reserve.getGuest() != null && reserve.getGuest().getId() > 0) {
                 indexMap.put("guestid", auxCount);
                 sb.append(" ,guestid=? ");
                 auxCount++;
             }
-            
-            if(reserve.getRoom()!= null && reserve.getRoom().getId() >0){
+
+            if (reserve.getRoom() != null && reserve.getRoom().getId() > 0) {
                 indexMap.put("roomid", auxCount);
                 sb.append(" ,roomid=? ");
                 auxCount++;
             }
-            
-            if(reserve.getEntryDate()!= null){
+
+            if (reserve.getEntryDate() != null) {
                 indexMap.put("dtEntry", auxCount);
                 sb.append(" ,dtEntry=? ");
                 auxCount++;
             }
-            
-            if(reserve.getOutDate()!= null){
+
+            if (reserve.getOutDate() != null) {
                 indexMap.put("dtOut", auxCount);
                 sb.append(" ,dtOut=? ");
                 auxCount++;
             }
-            
+
             indexMap.put("idreserve", auxCount);
-            sb.append(" where idreserve = ? " );
-            
-            String query = "update reserve set guestid=?,roomid=?,dtEntry=?,dtOut=?,dtupdate=? "
-                    + "where idreserve = ?;";
-            PreparedStatement ps = ConnectionManager.PreparedStatement(query);
-            
-            
-            if(indexMap.containsKey("guestid")){
+            sb.append(" where idreserve = ? ");
+
+            PreparedStatement ps = ConnectionManager.PreparedStatement(sb.toString());
+
+            if (indexMap.containsKey("guestid")) {
                 ps.setInt(indexMap.get("guestid"), reserve.getGuest().getId());
             }
-            
-            if(indexMap.containsKey("roomid")){
+
+            if (indexMap.containsKey("roomid")) {
                 ps.setInt(indexMap.get("roomid"), reserve.getRoom().getId());
             }
-            
-            if(indexMap.containsKey("dtEntry")){
-                ps.setDate(indexMap.get("dtEntry"), (java.sql.Date)reserve.getEntryDate());
+
+            if (indexMap.containsKey("dtEntry")) {
+                ps.setDate(indexMap.get("dtEntry"), (java.sql.Date) reserve.getEntryDate());
             }
-            
-            if(indexMap.containsKey("dtOut")){
-                ps.setDate(indexMap.get("dtOut"), (java.sql.Date)reserve.getEntryDate());
+
+            if (indexMap.containsKey("dtOut")) {
+                ps.setDate(indexMap.get("dtOut"), (java.sql.Date) reserve.getEntryDate());
             }
-            
+
             ps.setDate(1, (java.sql.Date) new Date());
 
             ps.setInt(indexMap.get("idreserve"), reserve.getId());
