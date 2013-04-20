@@ -21,6 +21,11 @@ public class Room {
         this.id = id;
     }
 
+    public Room(double price, RoomType type) {
+        this.price = price;
+        this.type = type;
+    }
+    
     public Date getDtCadastre() {
         return dtCadastre;
     }

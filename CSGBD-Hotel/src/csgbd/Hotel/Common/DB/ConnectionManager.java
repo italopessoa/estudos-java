@@ -67,4 +67,12 @@ public class ConnectionManager {
         
         return ps;
     }
+    
+    public static void CloseConnection(){
+        try {
+            connection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

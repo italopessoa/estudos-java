@@ -20,6 +20,15 @@ public class RoomType {
         this.id = id;
     }
 
+    public RoomType(String name) {
+        this.name = name;
+    }
+    
+    public RoomType(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+    
     public Date getDtCadastre() {
         return dtCadastre;
     }
@@ -51,4 +60,10 @@ public class RoomType {
     public void setDtUpdate(Date dtUpdate) {
         this.dtUpdate = dtUpdate;
     }
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
+    
 }
