@@ -86,7 +86,7 @@ public class GuestDAO implements IDAO<Guest> {
             StringBuilder sb = new StringBuilder("update guest set dtupdate=? ");
 
             if (guest.getName() != null && !guest.getName().equals("")) {
-                sb.append(",guestname='?' ");
+                sb.append(",guestname=? ");
                 indexMap.put("guestname", auxCount);
                 auxCount++;
             }

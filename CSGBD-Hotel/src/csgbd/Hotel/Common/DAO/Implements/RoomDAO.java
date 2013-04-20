@@ -42,7 +42,7 @@ public class RoomDAO implements IDAO<Room> {
     @Override
     public void Delete(Room room) {
         try {
-            String query = "delete from rom where idroom = ?;";
+            String query = "delete from room where idroom = ?;";
             PreparedStatement ps = ConnectionManager.PreparedStatement(query);
             ps.setInt(1, room.getId());
             ps.executeUpdate();

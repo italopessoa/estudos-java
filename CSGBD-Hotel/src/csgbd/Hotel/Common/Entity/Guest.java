@@ -23,6 +23,21 @@ public class Guest {
         this.id = id;
     }
 
+    public Guest(String name, int age, String email, String phone) {
+        this.name = name;
+        this.age = age;
+        this.email = email;
+        this.phone = phone;
+    }
+    
+    public Guest(int id, String name, int age, String email, String phone) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.email = email;
+        this.phone = phone;
+    }
+
     public String getEmail() {
         return email;
     }
