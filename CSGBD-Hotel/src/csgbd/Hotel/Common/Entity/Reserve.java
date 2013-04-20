@@ -23,6 +23,13 @@ public class Reserve {
         this.id = id;
     }
 
+    public Reserve(Guest guest, Room room, Date entryDate, Date outDate) {
+        this.guest = guest;
+        this.room = room;
+        this.entryDate = entryDate;
+        this.outDate = outDate;
+    }
+
     public int getId() {
         return id;
     }

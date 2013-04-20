@@ -93,4 +93,11 @@ public class Guest {
     public void setDtUpdate(Date dtUpdate) {
         this.dtUpdate = dtUpdate;
     }
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
+    
+    
 }

@@ -1,8 +1,17 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package csgbd.Hotel.GUI;
+
+import csgbd.Hotel.Common.DAO.Implements.GuestDAO;
+import csgbd.Hotel.Common.DAO.Implements.ReserveDAO;
+import csgbd.Hotel.Common.DAO.Implements.RoomDAO;
+import csgbd.Hotel.Common.DB.ConnectionManager;
+import csgbd.Hotel.Common.Entity.Guest;
+import csgbd.Hotel.Common.Entity.Reserve;
+import csgbd.Hotel.Common.Entity.Room;
+import java.util.ArrayList;
+import java.util.Date;
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -10,11 +19,25 @@ package csgbd.Hotel.GUI;
  */
 public class jfrmReserve extends javax.swing.JFrame {
 
+    private ArrayList<Room> rooms;
+    private ArrayList<Guest> guests;
+    private ArrayList<Reserve> reserves;
+    private RoomDAO roomDAO;
+    private GuestDAO guestDAO;
+    private ReserveDAO reserveDAO;
+
     /**
      * Creates new form jfrmReserve
      */
     public jfrmReserve() {
         initComponents();
+        ConnectionManager.OpenConnection();
+        this.roomDAO = new RoomDAO();
+        this.guestDAO = new GuestDAO();
+        this.reserveDAO = new ReserveDAO();
+        
+        this.showGuests();;
+        this.showRooms();
     }
 
     /**
@@ -26,21 +49,183 @@ public class jfrmReserve extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jtbGuests = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jtbRoom = new javax.swing.JTable();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jtbReserves = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jtbGuests.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "ID", "Name", "Email", "Phone", "Idade"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jtbGuests.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jtbGuestsMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jtbGuests);
+
+        jtbRoom.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "ID", "Price", "Type"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jtbRoom.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jtbRoomMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(jtbRoom);
+
+        jtbReserves.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "ID", "Guest", "Room", "In", "Out"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.Object.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jtbReserves.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jtbReservesMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(jtbReserves);
+
+        jButton1.setText("Reserve");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(67, 67, 67)
+                        .addComponent(jButton1))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 816, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 816, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(93, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addGap(91, 91, 91)))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jtbGuestsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtbGuestsMouseClicked
+    }//GEN-LAST:event_jtbGuestsMouseClicked
+
+    private void jtbRoomMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtbRoomMouseClicked
+    }//GEN-LAST:event_jtbRoomMouseClicked
+
+    private void jtbReservesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtbReservesMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtbReservesMouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Guest guest = null;
+        Room room = null;
+        int linha = this.jtbGuests.getSelectedRow();
+        if(linha >-1){
+            guest = new Guest(Integer.parseInt(this.jtbGuests.getValueAt(linha,0).toString()));
+        }
+        
+        linha = this.jtbRoom.getSelectedRow();
+        if(linha >-1){
+            room = new Room(Integer.parseInt(this.jtbRoom.getValueAt(linha,0).toString()));
+        }
+        
+        Reserve reserve = new Reserve(guest, room, new Date(), new Date());
+        this.newReserve(reserve);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -52,12 +237,7 @@ public class jfrmReserve extends javax.swing.JFrame {
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
+            javax.swing.UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(jfrmReserve.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
@@ -77,5 +257,73 @@ public class jfrmReserve extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTable jtbGuests;
+    private javax.swing.JTable jtbReserves;
+    private javax.swing.JTable jtbRoom;
     // End of variables declaration//GEN-END:variables
+
+    //<editor-fold defaultstate="collapsed" desc=" Room ">
+    
+    private void getRooms(){
+        this.rooms = this.roomDAO.SelectAll();
+    }
+    
+    private void showRooms() {
+        this.getRooms();
+        DefaultTableModel model = (DefaultTableModel) this.jtbRoom.getModel();
+        model.setNumRows(0);
+
+        for (Room room : this.rooms) {
+            model.addRow(new Object[]{room.getId(), room.getPrice(),room.getType()});
+        }
+    }
+    
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc=" Guest ">
+
+    private void getGuests(){
+        this.guests = this.guestDAO.SelectAll();
+    }
+    
+    private void showGuests() {
+        this.getGuests();
+        DefaultTableModel model = (DefaultTableModel) this.jtbGuests.getModel();
+        model.setNumRows(0);
+
+        for (Guest guest : this.guests) {
+            model.addRow(new Object[]{guest.getId(), guest.getName(), guest.getEmail(), guest.getPhone(), guest.getAge()});
+        }
+    }
+    
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc=" Reserve ">
+    
+    private void getReserves(){
+        this.reserves = this.reserveDAO.SelectAll();
+    }
+    
+    private void showReserves() {
+        this.getReserves();
+        DefaultTableModel model = (DefaultTableModel) this.jtbReserves.getModel();
+        model.setNumRows(0);
+
+        for (Reserve reserve : this.reserves) {
+            model.addRow(new Object[]{reserve.getId(), reserve.getGuest(), reserve.getRoom().getId(), 
+                reserve.getEntryDate().toString(), reserve.getOutDate().toString()});
+        }
+    }
+    
+    private void newReserve(Reserve reserve){
+        this.reserveDAO.Save(reserve);
+        JOptionPane.showMessageDialog(null, "Guest saved sucefull!");
+        showReserves();
+    }
+    
+    //</editor-fold>
 }
