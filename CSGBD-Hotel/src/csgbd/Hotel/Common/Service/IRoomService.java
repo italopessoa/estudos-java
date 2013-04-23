@@ -18,5 +18,5 @@ public interface IRoomService {
      
     public void Update(Room room) throws Exception;
     
-    public ArrayList<Room> SelectRoomsByType(RoomType roomType) throws Exception;
+    public ArrayList<Room> SelectRoomsByTypeOrPrice(RoomType roomType,Double price,boolean greaterThan) throws Exception;
 }

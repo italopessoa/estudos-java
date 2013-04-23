@@ -48,10 +48,10 @@ public class HotelFacade implements IHotelFacade{
     public void UpdateRoom(Room room) throws Exception {
         this.roomService.Update(room);
     }
-
+    
     @Override
-    public ArrayList<Room> SelectRoomsByType(RoomType roomType) throws Exception {
-        return this.roomService.SelectRoomsByType(roomType);
+    public ArrayList<Room> SelectRoomsByTypeOrPrice(RoomType roomType,Double price,boolean greaterThan) throws Exception{
+        return this.roomService.SelectRoomsByTypeOrPrice(roomType, price, greaterThan);
     }
 
     //</editor-fold>

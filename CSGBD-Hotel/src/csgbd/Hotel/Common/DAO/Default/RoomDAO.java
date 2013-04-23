@@ -1,5 +1,6 @@
 package csgbd.Hotel.Common.DAO.Default;
 
+import com.sun.istack.internal.Nullable;
 import csgbd.Hotel.Common.DAO.IDAO;
 import csgbd.Hotel.Common.DB.ConnectionFactory;
 import csgbd.Hotel.Common.Entity.Room;
@@ -131,16 +132,30 @@ public class RoomDAO implements IDAO<Room> {
 
     // </editor-fold>
     
-    public ArrayList<Room> SelectRoomsByType(RoomType roomType) throws SQLException{
+
+    public ArrayList<Room> SelectRoomsByTypeOrPrice(RoomType roomType,Double price,boolean greaterThan) throws SQLException{
         ArrayList<Room> rooms = new ArrayList<Room>();
+
+        StringBuilder sb = new StringBuilder("SELECT * FROM room r ");
+        sb.append("inner join roomtype rt on rt.idroomtype = r.roomtype ");
+        sb.append("where 1=1 ");
+        if(roomType != null){
+            sb.append("and r.roomtype = ").append(roomType.getId());
+        }
         
-        String sql_str = "SELECT * FROM room r "
-                + "inner join roomtype rt on rt.idroomtype = r.roomtype "
-                + "where r.roomtype = "+roomType.getId();
+        if(price != null){
+            if(greaterThan){
+                sb.append("and r.roomprice > ").append(price);
+            }
+            else{
+                sb.append("and r.roomprice <= ").append(price);
+            }
+        }
+        
         Room room;
         RoomType type;
         try {
-            ResultSet rs = ConnectionFactory.GetStatement().executeQuery(sql_str);
+            ResultSet rs = ConnectionFactory.GetStatement().executeQuery(sb.toString());
             while (rs.next()) {
                 room = new Room();
                 room.setId(rs.getInt(1));

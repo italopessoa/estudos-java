@@ -1,7 +1,5 @@
 package csgbd.Hotel.GUI;
 
-import csgbd.Hotel.Common.DAO.Default.RoomDAO;
-import csgbd.Hotel.Common.DAO.Default.RoomTypeDAO;
 import csgbd.Hotel.Common.DB.ConnectionFactory;
 import csgbd.Hotel.Common.Entity.Room;
 import csgbd.Hotel.Common.Entity.RoomType;
@@ -31,8 +29,8 @@ public class jfrmRoom extends javax.swing.JFrame {
         initComponents();
         ConnectionFactory.OpenConnection();
         this.facade = new HotelFacade();
-        this.showRooms();
         this.showRoomTypes();
+        this.enableFiltersPanel(false);
     }
 
     /**
@@ -54,8 +52,15 @@ public class jfrmRoom extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox();
-        jtxtName1 = new javax.swing.JTextField();
+        jtxtPrice = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
+        jpnlFilters = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jcbxType = new javax.swing.JCheckBox();
+        jcbxPrice = new javax.swing.JCheckBox();
+        jcbxGreaterThan = new javax.swing.JCheckBox();
+        jbtnOk = new javax.swing.JButton();
+        jbtnSearchRoom = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -74,7 +79,6 @@ public class jfrmRoom extends javax.swing.JFrame {
         });
 
         jtxtId.setEditable(false);
-        jtxtId.setText("jTextField1");
         jtxtId.setEnabled(false);
 
         jtbGuests.setModel(new javax.swing.table.DefaultTableModel(
@@ -130,60 +134,130 @@ public class jfrmRoom extends javax.swing.JFrame {
 
         jLabel4.setText("Price:");
 
+        jLabel2.setText("Filters:");
+
+        jcbxType.setText("Type");
+        jcbxType.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jcbxTypeItemStateChanged(evt);
+            }
+        });
+
+        jcbxPrice.setText("Price");
+        jcbxPrice.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jcbxPriceItemStateChanged(evt);
+            }
+        });
+
+        jcbxGreaterThan.setText("Greater than");
+
+        jbtnOk.setText("Ok");
+        jbtnOk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnOkActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jpnlFiltersLayout = new javax.swing.GroupLayout(jpnlFilters);
+        jpnlFilters.setLayout(jpnlFiltersLayout);
+        jpnlFiltersLayout.setHorizontalGroup(
+            jpnlFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpnlFiltersLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2)
+                .addGap(18, 18, 18)
+                .addComponent(jcbxType)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jcbxPrice)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jcbxGreaterThan)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jbtnOk)
+                .addContainerGap(41, Short.MAX_VALUE))
+        );
+        jpnlFiltersLayout.setVerticalGroup(
+            jpnlFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpnlFiltersLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jpnlFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jcbxType)
+                    .addComponent(jcbxPrice)
+                    .addComponent(jcbxGreaterThan)
+                    .addComponent(jbtnOk))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jbtnSearchRoom.setText("Search");
+        jbtnSearchRoom.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnSearchRoomActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(12, 12, 12)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(39, 39, 39)
                         .addComponent(jtxtId, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4))
+                        .addComponent(jLabel4)
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jtxtName1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jtxtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(12, 12, 12)
+                        .addComponent(jLabel3)
+                        .addGap(18, 18, 18)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jpnlFilters, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jbtnNewRoomType)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(6, 6, 6)
                         .addComponent(jbtnEditRoomType)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(6, 6, 6)
                         .addComponent(jbtnRemoveRoomType)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jbtnClear))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(6, 6, 6)
+                        .addComponent(jbtnClear)
+                        .addGap(6, 6, 6)
+                        .addComponent(jbtnSearchRoom))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addComponent(jLabel1))
                     .addComponent(jtxtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jtxtName1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGap(6, 6, 6)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jtxtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel3))))
+                .addGap(6, 6, 6)
+                .addComponent(jpnlFilters, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(6, 6, 6)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jbtnNewRoomType)
                     .addComponent(jbtnEditRoomType)
                     .addComponent(jbtnRemoveRoomType)
-                    .addComponent(jbtnClear))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                    .addComponent(jbtnClear)
+                    .addComponent(jbtnSearchRoom))
+                .addGap(6, 6, 6)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -194,7 +268,7 @@ public class jfrmRoom extends javax.swing.JFrame {
     }//GEN-LAST:event_jbtnClearActionPerformed
 
     private void jbtnNewRoomTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnNewRoomTypeActionPerformed
-        Room room = new Room(Double.parseDouble(this.jtxtName1.getText()), this.getSelectedRoomType());
+        Room room = new Room(Double.parseDouble(this.jtxtPrice.getText()), this.getSelectedRoomType());
         this.newRoom(room);
         this.showRooms();
     }//GEN-LAST:event_jbtnNewRoomTypeActionPerformed
@@ -203,7 +277,7 @@ public class jfrmRoom extends javax.swing.JFrame {
         int linha = this.jtbGuests.getSelectedRow();
         if(linha >-1){
             this.jtxtId.setText(String.valueOf(this.jtbGuests.getValueAt(linha,0)));
-            this.jtxtName1.setText(String.valueOf(this.jtbGuests.getValueAt(linha,1)));
+            this.jtxtPrice.setText(String.valueOf(this.jtbGuests.getValueAt(linha,1)));
         }
     }//GEN-LAST:event_jtbGuestsMouseClicked
 
@@ -218,6 +292,44 @@ public class jfrmRoom extends javax.swing.JFrame {
 
         this.updateRoomType(room);
     }//GEN-LAST:event_jbtnEditRoomTypeActionPerformed
+
+    private void jbtnSearchRoomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnSearchRoomActionPerformed
+        this.enableFiltersPanel(true);
+    }//GEN-LAST:event_jbtnSearchRoomActionPerformed
+
+    private void jcbxPriceItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jcbxPriceItemStateChanged
+        if(this.jcbxPrice.isSelected()){
+            this.jcbxGreaterThan.setEnabled(true);
+        }
+        else {
+            this.jcbxGreaterThan.setEnabled(false); 
+        }
+    }//GEN-LAST:event_jcbxPriceItemStateChanged
+
+    private void jcbxTypeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jcbxTypeItemStateChanged
+    }//GEN-LAST:event_jcbxTypeItemStateChanged
+
+    private void jbtnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnOkActionPerformed
+        
+        RoomType roomType = null;
+        Double price = null;
+        if (this.jcbxType.isSelected()){
+            roomType = (RoomType)this.jComboBox1.getSelectedItem();
+        }
+        
+        if (this.jcbxPrice.isSelected()){
+            price = Double.parseDouble(jtxtPrice.getText());
+        }
+        try {
+            this.rooms = this.facade.SelectRoomsByTypeOrPrice(roomType, price, this.jcbxGreaterThan.isSelected());
+        } catch (Exception ex) {
+            
+        }finally{
+            this.showRooms();
+            this.enableFiltersPanel(false);
+        }
+        
+    }//GEN-LAST:event_jbtnOkActionPerformed
 
     /**
      * @param args the command line arguments
@@ -251,16 +363,23 @@ public class jfrmRoom extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton jbtnClear;
     private javax.swing.JButton jbtnEditRoomType;
     private javax.swing.JButton jbtnNewRoomType;
+    private javax.swing.JButton jbtnOk;
     private javax.swing.JButton jbtnRemoveRoomType;
+    private javax.swing.JButton jbtnSearchRoom;
+    private javax.swing.JCheckBox jcbxGreaterThan;
+    private javax.swing.JCheckBox jcbxPrice;
+    private javax.swing.JCheckBox jcbxType;
+    private javax.swing.JPanel jpnlFilters;
     private javax.swing.JTable jtbGuests;
     private javax.swing.JTextField jtxtId;
-    private javax.swing.JTextField jtxtName1;
+    private javax.swing.JTextField jtxtPrice;
     // End of variables declaration//GEN-END:variables
 
     private void getRooms(){
@@ -272,7 +391,7 @@ public class jfrmRoom extends javax.swing.JFrame {
     }
     
     private void showRooms() {
-        this.getRooms();
+        //this.getRooms();
         DefaultTableModel model = (DefaultTableModel) this.jtbGuests.getModel();
         model.setNumRows(0);
 
@@ -314,7 +433,7 @@ public class jfrmRoom extends javax.swing.JFrame {
     
     private void clearRoomValues(){
         this.jtxtId.setText("");
-        this.jtxtName1.setText("");
+        this.jtxtPrice.setText("");
     }
     
     private void showRoomTypes(){
@@ -331,5 +450,15 @@ public class jfrmRoom extends javax.swing.JFrame {
     
     private RoomType getSelectedRoomType(){
         return (RoomType)this.jComboBox1.getSelectedItem();
+    }
+    
+    private void enableFiltersPanel(boolean enabled){
+        this.jpnlFilters.setEnabled(enabled);
+        this.jcbxType.setEnabled(enabled);
+        this.jcbxPrice.setEnabled(enabled);
+        if(!enabled){
+            this.jcbxGreaterThan.setEnabled(enabled);
+        }
+        this.jbtnOk.setEnabled(enabled);
     }
 }

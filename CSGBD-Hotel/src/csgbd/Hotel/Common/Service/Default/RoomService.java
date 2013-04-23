@@ -4,7 +4,6 @@ import csgbd.Hotel.Common.DAO.Default.RoomDAO;
 import csgbd.Hotel.Common.Entity.Room;
 import csgbd.Hotel.Common.Entity.RoomType;
 import csgbd.Hotel.Common.Service.IRoomService;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -40,7 +39,7 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public ArrayList<Room> SelectRoomsByType(RoomType roomType) throws Exception {
-        return this.dao.SelectRoomsByType(roomType);
+    public ArrayList<Room> SelectRoomsByTypeOrPrice(RoomType roomType, Double price, boolean greaterThan) throws Exception {
+        return this.dao.SelectRoomsByTypeOrPrice(roomType, price, greaterThan);
     }
 }

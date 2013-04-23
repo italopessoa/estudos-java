@@ -22,7 +22,7 @@ public interface IHotelFacade {
      
     public void UpdateRoom(Room room) throws Exception;
     
-    public ArrayList<Room> SelectRoomsByType(RoomType roomType) throws Exception;
+    public ArrayList<Room> SelectRoomsByTypeOrPrice(RoomType roomType,Double price,boolean greaterThan) throws Exception;
     
     //</editor-fold>
     
