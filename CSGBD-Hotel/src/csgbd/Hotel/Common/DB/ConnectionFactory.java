@@ -9,13 +9,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
- * @author italopessoa
+ * Class to manager the database connection
+ * 
+ * @author Italo Pessoa.
  */
 public class ConnectionFactory {
     private static Connection connection;
     private static Statement statement;
 
+    /**
+     * Configure the driver for PostgresSQL.
+     * 
+     * @author Italo Pessoa
+     */
     private static void ConfigDriver(){
         try{
             Class.forName("org.postgresql.Driver");
@@ -29,6 +35,11 @@ public class ConnectionFactory {
         System.out.println("Driver do PostgreSQL selecionado.");
     }
     
+    /**
+     * Open the connection with the database.
+     * 
+     * @author Italo Pessoa
+     */
     public static void OpenConnection(){
         if(connection == null){
             ConfigDriver();
@@ -41,6 +52,12 @@ public class ConnectionFactory {
         }
     }
     
+    /**
+     * Get the class statement.
+     * 
+     * @return java.sql.Statement.
+     * @author Italo Pessoa
+     */
     public static Statement GetStatement()
     {
         if(statement != null) {
@@ -57,6 +74,12 @@ public class ConnectionFactory {
         return statement;
     }
     
+    /**
+     * Get the PrepearedStatement to the query.
+     * @param query Query to get the PreparedStatement.
+     * @return java.sql.PreparedStatement.
+     * @author Italo Pessoa.
+     */
     public static PreparedStatement PreparedStatement(String query){
         PreparedStatement ps = null;
         try {
@@ -68,6 +91,10 @@ public class ConnectionFactory {
         return ps;
     }
     
+    /**
+     * Close the connection.
+     * @author Italo Pessoa
+     */
     public static void CloseConnection(){
         try {
             connection.close();
@@ -76,6 +103,11 @@ public class ConnectionFactory {
         }
     }
     
+    /**
+     * Get the actual connection.
+     * @return java.sql.Connection.
+     * @author Italo Pessoa.
+     */
     public static Connection GetConnection(){
         return connection;
     }
