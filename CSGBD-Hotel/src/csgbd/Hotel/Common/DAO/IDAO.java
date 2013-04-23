@@ -1,5 +1,6 @@
 package csgbd.Hotel.Common.DAO;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -8,11 +9,11 @@ import java.util.ArrayList;
  */
 public interface IDAO<T> {
 
-    void Save(T object) throws Exception;
+    void Save(T object) throws SQLException,Exception;
 
-    void Delete(T object) throws Exception;
+    void Delete(T object) throws SQLException,Exception;
 
-    ArrayList<T> SelectAll() throws Exception;
+    ArrayList<T> SelectAll() throws SQLException,Exception;
 
-    void Update(T object) throws Exception;
+    void Update(T object) throws SQLException,Exception;
 }

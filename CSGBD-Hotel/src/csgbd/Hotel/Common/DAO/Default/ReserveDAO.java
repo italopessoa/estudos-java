@@ -21,7 +21,7 @@ public class ReserveDAO implements IDAO<Reserve> {
 
     //<editor-fold defaultstate="collapsed" desc="IDAO Members">  
     @Override
-    public void Save(Reserve reserve) throws SQLException {
+    public void Save(Reserve reserve) throws SQLException,Exception {
         try {
             String query = "insert into reserve (guestid,roomid,dtEntry,dtOut,dtCadastre)"
                     + " values (?,?,?,?,?);";
@@ -42,12 +42,12 @@ public class ReserveDAO implements IDAO<Reserve> {
             ps.executeUpdate();
         } catch (SQLException ex) {
             ConnectionFactory.GetConnection().rollback();
-            throw  ex;
+            throw ex;
         }
     }
 
     @Override
-    public void Delete(Reserve reserve) throws SQLException{
+    public void Delete(Reserve reserve) throws SQLException,Exception {
         try {
             String query = "delete from reserve where idreserv = ?;";
             PreparedStatement ps = ConnectionFactory.PreparedStatement(query);
@@ -55,12 +55,12 @@ public class ReserveDAO implements IDAO<Reserve> {
             ps.executeUpdate();
         } catch (SQLException ex) {
             ConnectionFactory.GetConnection().rollback();
-            throw  ex;
+            throw ex;
         }
     }
 
     @Override
-    public ArrayList<Reserve> SelectAll() throws SQLException {
+    public ArrayList<Reserve> SelectAll() throws SQLException,Exception {
         ArrayList<Reserve> reserves = new ArrayList<Reserve>();
         String sql_str = "SELECT * FROM reserve re "
                 + "inner join room ro on ro.idroom = re.roomid "
@@ -104,13 +104,13 @@ public class ReserveDAO implements IDAO<Reserve> {
                 reserves.add(reserve);
             }
         } catch (SQLException ex) {
-            throw  ex;
+            throw ex;
         }
         return reserves;
     }
 
     @Override
-    public void Update(Reserve reserve) throws SQLException{
+    public void Update(Reserve reserve) throws SQLException,Exception {
         try {
 
             HashMap<String, Integer> indexMap = new HashMap<String, Integer>();
@@ -174,74 +174,34 @@ public class ReserveDAO implements IDAO<Reserve> {
             ps.executeUpdate();
         } catch (SQLException ex) {
             ConnectionFactory.GetConnection().rollback();
-            throw  ex;
+            throw ex;
         }
     }
 
     // </editor-fold>
     
-    public ArrayList<Reserve> SelectReserveByGuest(Guest guestValue) throws SQLException{
+    public ArrayList<Reserve> SelectReservesByRoomAndGuest(Room roomValue, Guest guestValue) throws SQLException,Exception{
         ArrayList<Reserve> reserves = new ArrayList<Reserve>();
-        String sql_str = "SELECT * FROM reserve re "
-                + "inner join room ro on ro.idroom = re.roomid "
-                + "inner join guest g on g.idguest = re.guestid "
-                + "inner join roomtype rt on rt.idroomtype = ro.roomtype "
-                + " and re.guestid = " + guestValue.getId();
-        Reserve reserve;
-        Room room;
-        Guest guest;
-        try {
-            ResultSet rs = ConnectionFactory.GetStatement().executeQuery(sql_str);
-            while (rs.next()) {
-
-                reserve = new Reserve(rs.getInt(1));
-                reserve.setEntryDate(rs.getDate(4));
-                reserve.setOutDate(rs.getDate(5));
-                reserve.setDtCadastre(rs.getDate(6));
-                reserve.setDtUpdate(rs.getDate(7));
-
-                room = new Room(rs.getInt(8));
-                room.setPrice(rs.getDouble(9));
-                room.setDtCadastre(rs.getDate(11));
-                room.setDtUpdate(rs.getDate(12));
-
-                guest = new Guest(rs.getInt(13));
-                guest.setName(rs.getString(14));
-                guest.setAge(rs.getInt(15));
-                guest.setEmail(rs.getString(16));
-                guest.setPhone(rs.getString(17));
-                guest.setDtCadastre(rs.getDate(18));
-                guest.setDtUpdate(rs.getDate(19));
-
-                RoomType roomType = new RoomType(rs.getInt(20));
-                roomType.setName(rs.getString(21));
-                roomType.setDtCadastre(rs.getDate(22));
-                roomType.setDtUpdate(rs.getDate(23));
-
-                room.setType(roomType);
-                reserve.setRoom(room);
-                reserve.setGuest(guest);
-
-                reserves.add(reserve);
-            }
-        } catch (SQLException ex) {
-            throw  ex;
+        
+        StringBuilder sb = new StringBuilder("SELECT * FROM reserve re ");
+        sb.append("inner join room ro on ro.idroom = re.roomid ");
+        sb.append("inner join guest g on g.idguest = re.guestid ");
+        sb.append("inner join roomtype rt on rt.idroomtype = ro.roomtype ");
+        sb.append("where 1=1 ");
+        
+        if(roomValue != null){
+            sb.append(" and re.roomid = ").append(roomValue.getId());
         }
-        return reserves;
-    }
-    
-    public ArrayList<Reserve> SelectReserveByRoom(Room roomValue) throws SQLException {
-        ArrayList<Reserve> reserves = new ArrayList<Reserve>();
-        String sql_str = "SELECT * FROM reserve re "
-                + "inner join room ro on ro.idroom = re.roomid "
-                + "inner join guest g on g.idguest = re.guestid "
-                + "inner join roomtype rt on rt.idroomtype = ro.roomtype "
-                + " and re.roomid = " + roomValue.getId();
+        
+        if(guestValue != null){
+            sb.append(" and re.guestid = ").append(guestValue.getId());
+        }
+        
         Reserve reserve;
         Room room;
         Guest guest;
         try {
-            ResultSet rs = ConnectionFactory.GetStatement().executeQuery(sql_str);
+            ResultSet rs = ConnectionFactory.GetStatement().executeQuery(sb.toString());
             while (rs.next()) {
 
                 reserve = new Reserve(rs.getInt(1));
@@ -275,7 +235,7 @@ public class ReserveDAO implements IDAO<Reserve> {
                 reserves.add(reserve);
             }
         } catch (SQLException ex) {
-            throw  ex;
+            throw ex;
         }
         return reserves;
     }

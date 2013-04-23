@@ -4,6 +4,7 @@ import csgbd.Hotel.Common.DB.ConnectionFactory;
 import csgbd.Hotel.Common.Entity.RoomType;
 import csgbd.Hotel.Common.Facade.Default.HotelFacade;
 import csgbd.Hotel.Common.Facade.IHotelFacade;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -164,7 +165,7 @@ public class jfrmRoomType extends javax.swing.JFrame {
                     .addComponent(jbtnRemoveRoomType)
                     .addComponent(jbtnClear))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -247,6 +248,8 @@ public class jfrmRoomType extends javax.swing.JFrame {
     private void getRoomTypes(){
         try {
             this.roomTypes = this.facade.SelectAllRoomTypes();
+        } catch (SQLException ex) {
+            Logger.getLogger(jfrmRoomType.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(jfrmRoomType.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -263,21 +266,26 @@ public class jfrmRoomType extends javax.swing.JFrame {
     }
     
     private void newRoomType(RoomType roomType){
-        try {
+        try {        
             this.facade.NewRoomType(roomType);
+            JOptionPane.showMessageDialog(null, "Guest saved sucefull!");
+        } catch (SQLException ex) {
+            Logger.getLogger(jfrmRoomType.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(jfrmRoomType.class.getName()).log(Level.SEVERE, null, ex);
         }
-        JOptionPane.showMessageDialog(null, "Guest saved sucefull!");
     }
     
     private void removeRoomType(RoomType roomType){
         try {
             this.facade.RemoveRoomType(roomType);
+            JOptionPane.showMessageDialog(null, "Guest removed sucefull!");
+        } catch (SQLException ex) {
+            Logger.getLogger(jfrmRoomType.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(jfrmRoomType.class.getName()).log(Level.SEVERE, null, ex);
         }
-        JOptionPane.showMessageDialog(null, "Guest removed sucefull!");
+        
         this.showRoomTypes();
         this.clearRoomTypeValues();
     }
@@ -285,10 +293,13 @@ public class jfrmRoomType extends javax.swing.JFrame {
     private void updateRoomType(RoomType roomType){
         try {
             this.facade.UpdateRoomType(roomType);
+            JOptionPane.showMessageDialog(null, "Guest updated sucefull!");
+        } catch (SQLException ex) {
+            Logger.getLogger(jfrmRoomType.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(jfrmRoomType.class.getName()).log(Level.SEVERE, null, ex);
         }
-        JOptionPane.showMessageDialog(null, "Guest updated sucefull!");
+        
         this.showRoomTypes();
         this.clearRoomTypeValues();
     }
