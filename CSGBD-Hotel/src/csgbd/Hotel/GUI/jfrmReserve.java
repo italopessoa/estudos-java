@@ -1,14 +1,15 @@
 package csgbd.Hotel.GUI;
 
-import csgbd.Hotel.Common.DAO.Implements.GuestDAO;
-import csgbd.Hotel.Common.DAO.Implements.ReserveDAO;
-import csgbd.Hotel.Common.DAO.Implements.RoomDAO;
-import csgbd.Hotel.Common.DB.ConnectionManager;
+import csgbd.Hotel.Common.DB.ConnectionFactory;
 import csgbd.Hotel.Common.Entity.Guest;
 import csgbd.Hotel.Common.Entity.Reserve;
 import csgbd.Hotel.Common.Entity.Room;
+import csgbd.Hotel.Common.Facade.Default.HotelFacade;
+import csgbd.Hotel.Common.Facade.IHotelFacade;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
@@ -22,19 +23,15 @@ public class jfrmReserve extends javax.swing.JFrame {
     private ArrayList<Room> rooms;
     private ArrayList<Guest> guests;
     private ArrayList<Reserve> reserves;
-    private RoomDAO roomDAO;
-    private GuestDAO guestDAO;
-    private ReserveDAO reserveDAO;
+    private IHotelFacade facade;
 
     /**
      * Creates new form jfrmReserve
      */
     public jfrmReserve() {
         initComponents();
-        ConnectionManager.OpenConnection();
-        this.roomDAO = new RoomDAO();
-        this.guestDAO = new GuestDAO();
-        this.reserveDAO = new ReserveDAO();
+        ConnectionFactory.OpenConnection();
+        this.facade = new HotelFacade();
         
         this.showGuests();;
         this.showRooms();
@@ -56,6 +53,18 @@ public class jfrmReserve extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         jtbReserves = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jtxtReserveId = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jtxtGuestName = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jtxtRoomId = new javax.swing.JTextField();
+        jtxtGuestId = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        dccIn = new datechooser.beans.DateChooserCombo();
+        dccOut = new datechooser.beans.DateChooserCombo();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -158,12 +167,27 @@ public class jfrmReserve extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(jtbReserves);
 
-        jButton1.setText("Reserve");
+        jButton1.setText("Make Reserve");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
+
+        jLabel1.setText("In:");
+
+        jLabel2.setText("Out:");
+
+        jtxtReserveId.setEditable(false);
+        jtxtReserveId.setEnabled(false);
+
+        jLabel3.setText("Id:");
+
+        jLabel4.setText("Guest:");
+
+        jLabel5.setText("Room:");
+
+        jLabel6.setText("Guest Id:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -173,44 +197,110 @@ public class jfrmReserve extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(67, 67, 67)
-                        .addComponent(jButton1))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 816, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 816, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jButton1)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel1))
+                                .addGap(18, 18, 18)
+                                .addComponent(jtxtRoomId, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 816, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 816, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jtxtReserveId, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jtxtGuestName, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel6)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jtxtGuestId, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(dccIn, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabel2)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(dccOut, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(23, 23, 23)))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(93, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addGap(91, 91, 91)))
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jtxtReserveId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jtxtGuestName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
+                    .addComponent(jtxtGuestId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jtxtRoomId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel2)
+                        .addComponent(dccIn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)))
+                    .addComponent(dccOut, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jtbGuestsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtbGuestsMouseClicked
+        int linha = this.jtbGuests.getSelectedRow();
+        if(linha >-1){
+            this.jtxtGuestId.setText(String.valueOf(this.jtbGuests.getValueAt(linha,0)));
+            this.jtxtGuestName.setText(String.valueOf(this.jtbGuests.getValueAt(linha,1)));
+        }
     }//GEN-LAST:event_jtbGuestsMouseClicked
 
     private void jtbRoomMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtbRoomMouseClicked
+        int linha = this.jtbRoom.getSelectedRow();
+        if(linha >-1){
+            this.jtxtRoomId.setText(String.valueOf(this.jtbRoom.getValueAt(linha,0)));
+        }
     }//GEN-LAST:event_jtbRoomMouseClicked
 
     private void jtbReservesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtbReservesMouseClicked
         // TODO add your handling code here:
+        int linha = this.jtbReserves.getSelectedRow();
+        if(linha >-1){
+            this.jtxtReserveId.setText(String.valueOf(this.jtbReserves.getValueAt(linha,0)));
+            this.jtxtGuestName.setText(String.valueOf(this.jtbReserves.getValueAt(linha,1)));
+            this.jtxtRoomId.setText(String.valueOf(this.jtbReserves.getValueAt(linha,2)));
+            //this.jftxtPhone.setText(String.valueOf(this.jtbReserves.getValueAt(linha,3)));
+            //this.jtxtAge.setText(String.valueOf(this.jtbReserves.getValueAt(linha,4)));
+        }
     }//GEN-LAST:event_jtbReservesMouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Date dtIn = dccIn.getSelectedDate().getTime();
+        Date dtOut = dccOut.getSelectedDate().getTime();
+        
         Guest guest = null;
         Room room = null;
         int linha = this.jtbGuests.getSelectedRow();
@@ -223,7 +313,8 @@ public class jfrmReserve extends javax.swing.JFrame {
             room = new Room(Integer.parseInt(this.jtbRoom.getValueAt(linha,0).toString()));
         }
         
-        Reserve reserve = new Reserve(guest, room, new Date(), new Date());
+        Reserve reserve = new Reserve(guest, room, dtIn,dtOut);
+        
         this.newReserve(reserve);
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -257,19 +348,35 @@ public class jfrmReserve extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private datechooser.beans.DateChooserCombo dccIn;
+    private datechooser.beans.DateChooserCombo dccOut;
     private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jtbGuests;
     private javax.swing.JTable jtbReserves;
     private javax.swing.JTable jtbRoom;
+    private javax.swing.JTextField jtxtGuestId;
+    private javax.swing.JTextField jtxtGuestName;
+    private javax.swing.JTextField jtxtReserveId;
+    private javax.swing.JTextField jtxtRoomId;
     // End of variables declaration//GEN-END:variables
 
     //<editor-fold defaultstate="collapsed" desc=" Room ">
     
     private void getRooms(){
-        this.rooms = this.roomDAO.SelectAll();
+        try {
+            this.rooms = this.facade.SelectAllRooms();
+        } catch (Exception ex) {
+            Logger.getLogger(jfrmReserve.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void showRooms() {
@@ -287,7 +394,11 @@ public class jfrmReserve extends javax.swing.JFrame {
     //<editor-fold defaultstate="collapsed" desc=" Guest ">
 
     private void getGuests(){
-        this.guests = this.guestDAO.SelectAll();
+        try {
+            this.guests = this.facade.SelectAllGuests();
+        } catch (Exception ex) {
+            Logger.getLogger(jfrmReserve.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void showGuests() {
@@ -305,7 +416,11 @@ public class jfrmReserve extends javax.swing.JFrame {
     //<editor-fold defaultstate="collapsed" desc=" Reserve ">
     
     private void getReserves(){
-        this.reserves = this.reserveDAO.SelectAll();
+        try {
+            this.reserves = this.facade.SelectAllReserves();
+        } catch (Exception ex) {
+            Logger.getLogger(jfrmReserve.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void showReserves() {
@@ -320,7 +435,11 @@ public class jfrmReserve extends javax.swing.JFrame {
     }
     
     private void newReserve(Reserve reserve){
-        this.reserveDAO.Save(reserve);
+        try {
+            this.facade.MakeSave(reserve);
+        } catch (Exception ex) {
+            Logger.getLogger(jfrmReserve.class.getName()).log(Level.SEVERE, null, ex);
+        }
         JOptionPane.showMessageDialog(null, "Guest saved sucefull!");
         showReserves();
     }

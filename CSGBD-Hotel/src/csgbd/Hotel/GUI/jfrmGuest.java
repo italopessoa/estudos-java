@@ -1,13 +1,14 @@
 package csgbd.Hotel.GUI;
 
-import csgbd.Hotel.Common.DAO.Implements.GuestDAO;
-import csgbd.Hotel.Common.DB.ConnectionManager;
+import csgbd.Hotel.Common.DAO.Default.GuestDAO;
+import csgbd.Hotel.Common.DB.ConnectionFactory;
 import csgbd.Hotel.Common.Entity.Guest;
-import java.text.ParseException;
+import csgbd.Hotel.Common.Facade.Default.HotelFacade;
+import csgbd.Hotel.Common.Facade.IHotelFacade;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
@@ -22,15 +23,16 @@ public class jfrmGuest extends javax.swing.JFrame {
     private ArrayList<Guest> guests;
     private GuestDAO guestDAO;
     private MaskFormatter ftmTelefone;
+    private IHotelFacade facade;
 
     /**
      * Creates new form jfrmGuest
      */
     public jfrmGuest() {
         initComponents();
-        ConnectionManager.OpenConnection();
+        ConnectionFactory.OpenConnection();
         this.guestDAO = new GuestDAO();
-        this.showGuests();
+        this.facade = new HotelFacade();
     }
 
     /**
@@ -58,6 +60,7 @@ public class jfrmGuest extends javax.swing.JFrame {
         jbtnEditGuest = new javax.swing.JButton();
         jbtnRemoveGuest = new javax.swing.JButton();
         jbtnClear = new javax.swing.JButton();
+        jbtnSearch = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -136,6 +139,13 @@ public class jfrmGuest extends javax.swing.JFrame {
             }
         });
 
+        jbtnSearch.setText("Search");
+        jbtnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnSearchActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -177,7 +187,9 @@ public class jfrmGuest extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jbtnRemoveGuest)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jbtnClear)))
+                                .addComponent(jbtnClear)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jbtnSearch)))
                         .addGap(0, 137, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -200,15 +212,16 @@ public class jfrmGuest extends javax.swing.JFrame {
                     .addComponent(jtxtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
                     .addComponent(jftxtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jbtnNewGuest)
                     .addComponent(jbtnEditGuest)
                     .addComponent(jbtnRemoveGuest)
-                    .addComponent(jbtnClear))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                    .addComponent(jbtnClear)
+                    .addComponent(jbtnSearch))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         pack();
@@ -219,7 +232,7 @@ public class jfrmGuest extends javax.swing.JFrame {
                 this.jtxtEmail.getText(), this.jftxtPhone.getText());
 
         this.newGuest(guest);
-        this.showGuests();
+//        this.showGuests(false);
     }//GEN-LAST:event_jbtnNewGuestActionPerformed
 
     private void jtbGuestsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtbGuestsMouseClicked
@@ -251,6 +264,15 @@ public class jfrmGuest extends javax.swing.JFrame {
     private void jbtnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnClearActionPerformed
         this.clearGuestValues();
     }//GEN-LAST:event_jbtnClearActionPerformed
+
+    private void jbtnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnSearchActionPerformed
+        try {
+            this.guests = this.facade.SelectGuestByName(this.jtxtName.getText());
+        } catch (Exception ex) {
+            Logger.getLogger(jfrmGuest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.showGuests();
+    }//GEN-LAST:event_jbtnSearchActionPerformed
 
     /**
      * @param args the command line arguments
@@ -292,6 +314,7 @@ public class jfrmGuest extends javax.swing.JFrame {
     private javax.swing.JButton jbtnEditGuest;
     private javax.swing.JButton jbtnNewGuest;
     private javax.swing.JButton jbtnRemoveGuest;
+    private javax.swing.JButton jbtnSearch;
     private javax.swing.JFormattedTextField jftxtPhone;
     private javax.swing.JTable jtbGuests;
     private javax.swing.JTextField jtxtAge;
@@ -301,11 +324,15 @@ public class jfrmGuest extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void getGuests(){
-        this.guests = this.guestDAO.SelectAll();
+        try {
+            this.guests = this.facade.SelectAllGuests();
+        } catch (Exception ex) {
+            Logger.getLogger(jfrmGuest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void showGuests() {
-        this.getGuests();
+        //this.getGuests();
         DefaultTableModel model = (DefaultTableModel) this.jtbGuests.getModel();
         model.setNumRows(0);
 
@@ -315,21 +342,33 @@ public class jfrmGuest extends javax.swing.JFrame {
     }
     
     private void newGuest(Guest guest){
-        this.guestDAO.Save(guest);
+        try {
+            this.facade.NewGuest(guest);
+        } catch (Exception ex) {
+            Logger.getLogger(jfrmGuest.class.getName()).log(Level.SEVERE, null, ex);
+        }
         JOptionPane.showMessageDialog(null, "Guest saved sucefull!");
     }
     
     private void removeGuest(Guest guest){
-        this.guestDAO.Delete(guest);
+        try {
+            this.facade.RemoveGuest(guest);
+        } catch (Exception ex) {
+            Logger.getLogger(jfrmGuest.class.getName()).log(Level.SEVERE, null, ex);
+        }
         JOptionPane.showMessageDialog(null, "Guest removed sucefull!");
-        this.showGuests();
+//        this.showGuests(false);
         this.clearGuestValues();
     }
     
     private void updateGuest(Guest guest){
-        this.guestDAO.Update(guest);
+        try {
+            this.guestDAO.Update(guest);
+        } catch (SQLException ex) {
+            Logger.getLogger(jfrmGuest.class.getName()).log(Level.SEVERE, null, ex);
+        }
         JOptionPane.showMessageDialog(null, "Guest updated sucefull!");
-        this.showGuests();
+//        this.showGuests(false);
         this.clearGuestValues();
     }
     
@@ -339,5 +378,15 @@ public class jfrmGuest extends javax.swing.JFrame {
         this.jtxtEmail.setText("");
         this.jftxtPhone.setText("");
         this.jtxtAge.setText("");
+    }
+    
+    @Override
+    public void setVisible(boolean isVisible){
+        if(isVisible){
+            super.setVisible(isVisible);
+//            this.showGuests(false);
+        }else{
+            super.setVisible(isVisible);
+        }
     }
 }

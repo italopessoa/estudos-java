@@ -1,10 +1,12 @@
 package csgbd.Hotel.GUI;
 
-import csgbd.Hotel.Common.DAO.Implements.RoomTypeDAO;
-import csgbd.Hotel.Common.DB.ConnectionManager;
-import csgbd.Hotel.Common.Entity.Guest;
+import csgbd.Hotel.Common.DB.ConnectionFactory;
 import csgbd.Hotel.Common.Entity.RoomType;
+import csgbd.Hotel.Common.Facade.Default.HotelFacade;
+import csgbd.Hotel.Common.Facade.IHotelFacade;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
@@ -16,14 +18,14 @@ import javax.swing.table.DefaultTableModel;
 public class jfrmRoomType extends javax.swing.JFrame {
 
     private ArrayList<RoomType> roomTypes;
-    private RoomTypeDAO roomTypeDAO;
+    private IHotelFacade facade;
     /**
      * Creates new form jfrmRoomType
      */
     public jfrmRoomType() {
         initComponents();
-        ConnectionManager.OpenConnection();
-        this.roomTypeDAO = new RoomTypeDAO();
+        ConnectionFactory.OpenConnection();
+        this.facade = new HotelFacade();
         this.showRoomTypes();
     }
 
@@ -178,7 +180,7 @@ public class jfrmRoomType extends javax.swing.JFrame {
 
     private void jbtnRemoveRoomTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnRemoveRoomTypeActionPerformed
         RoomType roomType = new RoomType(Integer.parseInt(this.jtxtId.getText()));
-        this.removeGuest(roomType);
+        this.removeRoomType(roomType);
     }//GEN-LAST:event_jbtnRemoveRoomTypeActionPerformed
 
     private void jbtnNewRoomTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnNewRoomTypeActionPerformed
@@ -243,7 +245,11 @@ public class jfrmRoomType extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void getRoomTypes(){
-        this.roomTypes = this.roomTypeDAO.SelectAll();
+        try {
+            this.roomTypes = this.facade.SelectAllRoomTypes();
+        } catch (Exception ex) {
+            Logger.getLogger(jfrmRoomType.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void showRoomTypes() {
@@ -257,19 +263,31 @@ public class jfrmRoomType extends javax.swing.JFrame {
     }
     
     private void newRoomType(RoomType roomType){
-        this.roomTypeDAO.Save(roomType);
+        try {
+            this.facade.NewRoomType(roomType);
+        } catch (Exception ex) {
+            Logger.getLogger(jfrmRoomType.class.getName()).log(Level.SEVERE, null, ex);
+        }
         JOptionPane.showMessageDialog(null, "Guest saved sucefull!");
     }
     
-    private void removeGuest(RoomType roomType){
-        this.roomTypeDAO.Delete(roomType);
+    private void removeRoomType(RoomType roomType){
+        try {
+            this.facade.RemoveRoomType(roomType);
+        } catch (Exception ex) {
+            Logger.getLogger(jfrmRoomType.class.getName()).log(Level.SEVERE, null, ex);
+        }
         JOptionPane.showMessageDialog(null, "Guest removed sucefull!");
         this.showRoomTypes();
         this.clearRoomTypeValues();
     }
     
     private void updateRoomType(RoomType roomType){
-        this.roomTypeDAO.Update(roomType);
+        try {
+            this.facade.UpdateRoomType(roomType);
+        } catch (Exception ex) {
+            Logger.getLogger(jfrmRoomType.class.getName()).log(Level.SEVERE, null, ex);
+        }
         JOptionPane.showMessageDialog(null, "Guest updated sucefull!");
         this.showRoomTypes();
         this.clearRoomTypeValues();

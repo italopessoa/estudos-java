@@ -1,11 +1,15 @@
 package csgbd.Hotel.GUI;
 
-import csgbd.Hotel.Common.DAO.Implements.RoomDAO;
-import csgbd.Hotel.Common.DAO.Implements.RoomTypeDAO;
-import csgbd.Hotel.Common.DB.ConnectionManager;
+import csgbd.Hotel.Common.DAO.Default.RoomDAO;
+import csgbd.Hotel.Common.DAO.Default.RoomTypeDAO;
+import csgbd.Hotel.Common.DB.ConnectionFactory;
 import csgbd.Hotel.Common.Entity.Room;
 import csgbd.Hotel.Common.Entity.RoomType;
+import csgbd.Hotel.Common.Facade.Default.HotelFacade;
+import csgbd.Hotel.Common.Facade.IHotelFacade;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
@@ -18,17 +22,15 @@ public class jfrmRoom extends javax.swing.JFrame {
 
     private ArrayList<Room> rooms;
     private ArrayList<RoomType> roomsTypes;
-    private RoomDAO roomDAO;
-    private RoomTypeDAO roomTypeDAO;
+    private IHotelFacade facade;
     
     /**
      * Creates new form jfrmRoom
      */
     public jfrmRoom() {
         initComponents();
-        ConnectionManager.OpenConnection();
-        this.roomDAO = new RoomDAO();
-        this.roomTypeDAO = new RoomTypeDAO();
+        ConnectionFactory.OpenConnection();
+        this.facade = new HotelFacade();
         this.showRooms();
         this.showRoomTypes();
     }
@@ -262,7 +264,11 @@ public class jfrmRoom extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void getRooms(){
-        this.rooms = this.roomDAO.SelectAll();
+        try {
+            this.rooms = this.facade.SelectAllRooms();
+        } catch (Exception ex) {
+            Logger.getLogger(jfrmRoom.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void showRooms() {
@@ -276,19 +282,31 @@ public class jfrmRoom extends javax.swing.JFrame {
     }
     
     private void newRoom(Room room){
-        this.roomDAO.Save(room);
-        JOptionPane.showMessageDialog(null, "Guest saved sucefull!");
+        try {
+            this.facade.NewRoom(room);
+            JOptionPane.showMessageDialog(null, "Guest saved sucefull!");
+        } catch (Exception ex) {
+            Logger.getLogger(jfrmRoom.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void removeRoom(Room room){
-        this.roomDAO.Delete(room);
+        try {
+            this.facade.RemoveRoom(room);
+        } catch (Exception ex) {
+            Logger.getLogger(jfrmRoom.class.getName()).log(Level.SEVERE, null, ex);
+        }
         JOptionPane.showMessageDialog(null, "Guest removed sucefull!");
         this.showRooms();
         this.clearRoomValues();
     }
     
     private void updateRoomType(Room room){
-        this.roomDAO.Update(room);
+        try {
+            this.facade.UpdateRoom(room);
+        } catch (Exception ex) {
+            Logger.getLogger(jfrmRoom.class.getName()).log(Level.SEVERE, null, ex);
+        }
         JOptionPane.showMessageDialog(null, "Guest updated sucefull!");
         this.showRooms();
         this.clearRoomValues();
@@ -300,7 +318,11 @@ public class jfrmRoom extends javax.swing.JFrame {
     }
     
     private void showRoomTypes(){
-        this.roomsTypes = this.roomTypeDAO.SelectAll();
+        try {
+            this.roomsTypes = this.facade.SelectAllRoomTypes();
+        } catch (Exception ex) {
+            Logger.getLogger(jfrmRoom.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         for(RoomType roomType  : this.roomsTypes) {
             this.jComboBox1.addItem(roomType);

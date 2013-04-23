@@ -8,11 +8,11 @@ import java.util.ArrayList;
  */
 public interface IDAO<T> {
 
-    void Save(T object);
+    void Save(T object) throws Exception;
 
-    void Delete(T object);
+    void Delete(T object) throws Exception;
 
-    ArrayList<T> SelectAll();
+    ArrayList<T> SelectAll() throws Exception;
 
-    void Update(T object);
+    void Update(T object) throws Exception;
 }
