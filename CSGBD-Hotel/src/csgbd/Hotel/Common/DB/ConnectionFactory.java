@@ -12,7 +12,7 @@ import java.util.logging.Logger;
  *
  * @author italopessoa
  */
-public class ConnectionManager {
+public class ConnectionFactory {
     private static Connection connection;
     private static Statement statement;
 
@@ -36,7 +36,7 @@ public class ConnectionManager {
                 //jdbc:postgresql://localhost:5432/minhabase
                 connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/csgbd","postgres","postgres");
             } catch (SQLException ex) {
-                Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ConnectionFactory.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -50,7 +50,7 @@ public class ConnectionManager {
             try {
                 statement = connection.createStatement();
             } catch (SQLException ex) {
-                Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ConnectionFactory.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         
@@ -62,7 +62,7 @@ public class ConnectionManager {
         try {
             ps = connection.prepareStatement(query);
         } catch (SQLException ex) {
-            Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ConnectionFactory.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         return ps;
@@ -72,7 +72,11 @@ public class ConnectionManager {
         try {
             connection.close();
         } catch (SQLException ex) {
-            Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ConnectionFactory.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public static Connection GetConnection(){
+        return connection;
     }
 }

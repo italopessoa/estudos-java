@@ -4,8 +4,8 @@
  */
 package csgbd.Hotel.GUI;
 
-import csgbd.Hotel.Common.DAO.Implements.GuestDAO;
-import csgbd.Hotel.Common.DB.ConnectionManager;
+import csgbd.Hotel.Common.DAO.Default.GuestDAO;
+import csgbd.Hotel.Common.DB.ConnectionFactory;
 import csgbd.Hotel.Common.Entity.Guest;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -28,16 +28,16 @@ public class jfrmPrincipal extends javax.swing.JFrame {
     
     private void prepareGuestTableModel() {
         ArrayList<Guest> guests;
-        ConnectionManager.OpenConnection();
+        ConnectionFactory.OpenConnection();
         GuestDAO gd = new GuestDAO();
-        guests = gd.SelectAll();//new ArrayList<Guest>();
+        //guests = gd.SelectAll();//new ArrayList<Guest>();
                 
         DefaultTableModel tabmodel = (DefaultTableModel) jTable1.getModel();
         tabmodel.setNumRows(0);
 
-        for (Guest guest : guests) {
-            tabmodel.addRow(new Object[]{guest.getId(), guest.getName(), guest.getAge(), guest.getEmail()});
-        }
+//        for (Guest guest : guests) {
+//            tabmodel.addRow(new Object[]{guest.getId(), guest.getName(), guest.getAge(), guest.getEmail()});
+//        }
     }
     /**
      * This method is called from within the constructor to initialize the form.
