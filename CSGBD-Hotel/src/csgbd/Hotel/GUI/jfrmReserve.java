@@ -6,6 +6,7 @@ import csgbd.Hotel.Common.Entity.Reserve;
 import csgbd.Hotel.Common.Entity.Room;
 import csgbd.Hotel.Common.Facade.Default.HotelFacade;
 import csgbd.Hotel.Common.Facade.IHotelFacade;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
@@ -32,8 +33,8 @@ public class jfrmReserve extends javax.swing.JFrame {
         initComponents();
         ConnectionFactory.OpenConnection();
         this.facade = new HotelFacade();
-        
-        this.showGuests();;
+        this.enableFiltersPanel(false);
+        this.showGuests();
         this.showRooms();
     }
 
@@ -65,6 +66,12 @@ public class jfrmReserve extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         dccIn = new datechooser.beans.DateChooserCombo();
         dccOut = new datechooser.beans.DateChooserCombo();
+        jpnlFilters = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        jcbxRoom = new javax.swing.JCheckBox();
+        jcbxGuest = new javax.swing.JCheckBox();
+        jbtnOk = new javax.swing.JButton();
+        jbtnSearch = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -189,6 +196,60 @@ public class jfrmReserve extends javax.swing.JFrame {
 
         jLabel6.setText("Guest Id:");
 
+        jLabel7.setText("Filters:");
+
+        jcbxRoom.setText("Room:");
+        jcbxRoom.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jcbxRoomItemStateChanged(evt);
+            }
+        });
+
+        jcbxGuest.setText("Guest");
+        jcbxGuest.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jcbxGuestItemStateChanged(evt);
+            }
+        });
+
+        jbtnOk.setText("Ok");
+        jbtnOk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnOkActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jpnlFiltersLayout = new javax.swing.GroupLayout(jpnlFilters);
+        jpnlFilters.setLayout(jpnlFiltersLayout);
+        jpnlFiltersLayout.setHorizontalGroup(
+            jpnlFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpnlFiltersLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel7)
+                .addGap(18, 18, 18)
+                .addComponent(jcbxRoom)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jcbxGuest)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jbtnOk)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jpnlFiltersLayout.setVerticalGroup(
+            jpnlFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpnlFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jLabel7)
+                .addComponent(jcbxRoom)
+                .addComponent(jcbxGuest)
+                .addComponent(jbtnOk))
+        );
+
+        jbtnSearch.setText("Seach");
+        jbtnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnSearchActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -197,15 +258,22 @@ public class jfrmReserve extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addGap(63, 63, 63)
+                        .addComponent(dccIn, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel2)
+                        .addGap(18, 18, 18)
+                        .addComponent(dccOut, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jButton1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jbtnSearch))
                             .addComponent(jLabel3)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel1))
+                                .addComponent(jLabel5)
                                 .addGap(18, 18, 18)
                                 .addComponent(jtxtRoomId, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 816, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -221,14 +289,9 @@ public class jfrmReserve extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jLabel6)
                                         .addGap(18, 18, 18)
-                                        .addComponent(jtxtGuestId, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(dccIn, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jLabel2)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(dccOut, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(23, 23, 23)))))
+                                        .addComponent(jtxtGuestId, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jLabel1)
+                            .addComponent(jpnlFilters, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
@@ -248,23 +311,25 @@ public class jfrmReserve extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jtxtRoomId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel2)
-                        .addComponent(dccIn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)))
+                    .addComponent(jLabel2)
+                    .addComponent(dccIn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
                     .addComponent(dccOut, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addComponent(jpnlFilters, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jbtnSearch))
+                .addGap(9, 9, 9)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29))
+                .addContainerGap())
         );
 
         pack();
@@ -318,6 +383,47 @@ public class jfrmReserve extends javax.swing.JFrame {
         this.newReserve(reserve);
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jcbxRoomItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jcbxRoomItemStateChanged
+
+    }//GEN-LAST:event_jcbxRoomItemStateChanged
+
+    private void jcbxGuestItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jcbxGuestItemStateChanged
+    }//GEN-LAST:event_jcbxGuestItemStateChanged
+
+    private void jbtnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnOkActionPerformed
+
+        Guest guest = null;
+        Room room = null;
+        int linha=0;
+        if(this.jcbxRoom.isSelected()){
+            linha = this.jtbRoom.getSelectedRow();
+            if(linha >-1){
+                room = new Room(Integer.parseInt(this.jtbRoom.getValueAt(linha,0).toString()));
+            }
+        }
+        if(this.jcbxGuest.isSelected()){
+            linha = this.jtbGuests.getSelectedRow();
+            if(linha >-1){
+                guest = new Guest(Integer.parseInt(this.jtbGuests.getValueAt(linha,0).toString()));
+            }
+        }
+        
+        try {
+            this.reserves = this.facade.SelectReservesByRoomAndGuest(room, guest);
+        } catch (SQLException ex) {
+            Logger.getLogger(jfrmReserve.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(jfrmReserve.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        this.showReserves();
+
+    }//GEN-LAST:event_jbtnOkActionPerformed
+
+    private void jbtnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnSearchActionPerformed
+        this.enableFiltersPanel(true);
+    }//GEN-LAST:event_jbtnSearchActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -357,9 +463,15 @@ public class jfrmReserve extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JButton jbtnOk;
+    private javax.swing.JButton jbtnSearch;
+    private javax.swing.JCheckBox jcbxGuest;
+    private javax.swing.JCheckBox jcbxRoom;
+    private javax.swing.JPanel jpnlFilters;
     private javax.swing.JTable jtbGuests;
     private javax.swing.JTable jtbReserves;
     private javax.swing.JTable jtbRoom;
@@ -372,11 +484,14 @@ public class jfrmReserve extends javax.swing.JFrame {
     //<editor-fold defaultstate="collapsed" desc=" Room ">
     
     private void getRooms(){
-        try {
+        try {        
             this.rooms = this.facade.SelectAllRooms();
+        } catch (SQLException ex) {
+            Logger.getLogger(jfrmReserve.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(jfrmReserve.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }
     
     private void showRooms() {
@@ -396,6 +511,8 @@ public class jfrmReserve extends javax.swing.JFrame {
     private void getGuests(){
         try {
             this.guests = this.facade.SelectAllGuests();
+        } catch (SQLException ex) {
+            Logger.getLogger(jfrmReserve.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(jfrmReserve.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -418,13 +535,15 @@ public class jfrmReserve extends javax.swing.JFrame {
     private void getReserves(){
         try {
             this.reserves = this.facade.SelectAllReserves();
+        } catch (SQLException ex) {
+            Logger.getLogger(jfrmReserve.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(jfrmReserve.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
     private void showReserves() {
-        this.getReserves();
+//        this.getReserves();
         DefaultTableModel model = (DefaultTableModel) this.jtbReserves.getModel();
         model.setNumRows(0);
 
@@ -437,6 +556,8 @@ public class jfrmReserve extends javax.swing.JFrame {
     private void newReserve(Reserve reserve){
         try {
             this.facade.MakeSave(reserve);
+        } catch (SQLException ex) {
+            Logger.getLogger(jfrmReserve.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(jfrmReserve.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -445,4 +566,12 @@ public class jfrmReserve extends javax.swing.JFrame {
     }
     
     //</editor-fold>
+
+    private void enableFiltersPanel(boolean enabled){
+        this.jpnlFilters.setEnabled(enabled);
+        this.jcbxGuest.setEnabled(enabled);
+        this.jcbxRoom.setEnabled(enabled);
+        this.jbtnOk.setEnabled(enabled);
+    }
+
 }

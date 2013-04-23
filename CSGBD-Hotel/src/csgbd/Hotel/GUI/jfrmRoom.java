@@ -5,6 +5,7 @@ import csgbd.Hotel.Common.Entity.Room;
 import csgbd.Hotel.Common.Entity.RoomType;
 import csgbd.Hotel.Common.Facade.Default.HotelFacade;
 import csgbd.Hotel.Common.Facade.IHotelFacade;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -320,10 +321,12 @@ public class jfrmRoom extends javax.swing.JFrame {
         if (this.jcbxPrice.isSelected()){
             price = Double.parseDouble(jtxtPrice.getText());
         }
-        try {
+        try {        
             this.rooms = this.facade.SelectRoomsByTypeOrPrice(roomType, price, this.jcbxGreaterThan.isSelected());
+        } catch (SQLException ex) {
+            Logger.getLogger(jfrmRoom.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-            
+            Logger.getLogger(jfrmRoom.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
             this.showRooms();
             this.enableFiltersPanel(false);
@@ -385,6 +388,8 @@ public class jfrmRoom extends javax.swing.JFrame {
     private void getRooms(){
         try {
             this.rooms = this.facade.SelectAllRooms();
+        } catch (SQLException ex) {
+            Logger.getLogger(jfrmRoom.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(jfrmRoom.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -404,9 +409,12 @@ public class jfrmRoom extends javax.swing.JFrame {
         try {
             this.facade.NewRoom(room);
             JOptionPane.showMessageDialog(null, "Guest saved sucefull!");
+        } catch (SQLException ex) {
+            Logger.getLogger(jfrmRoom.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(jfrmRoom.class.getName()).log(Level.SEVERE, null, ex);
         }
+            
     }
     
     private void removeRoom(Room room){
@@ -423,10 +431,12 @@ public class jfrmRoom extends javax.swing.JFrame {
     private void updateRoomType(Room room){
         try {
             this.facade.UpdateRoom(room);
+            JOptionPane.showMessageDialog(null, "Guest updated sucefull!");
+        } catch (SQLException ex) {
+            Logger.getLogger(jfrmRoom.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(jfrmRoom.class.getName()).log(Level.SEVERE, null, ex);
         }
-        JOptionPane.showMessageDialog(null, "Guest updated sucefull!");
         this.showRooms();
         this.clearRoomValues();
     }
@@ -439,6 +449,8 @@ public class jfrmRoom extends javax.swing.JFrame {
     private void showRoomTypes(){
         try {
             this.roomsTypes = this.facade.SelectAllRoomTypes();
+        } catch (SQLException ex) {
+            Logger.getLogger(jfrmRoom.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(jfrmRoom.class.getName()).log(Level.SEVERE, null, ex);
         }

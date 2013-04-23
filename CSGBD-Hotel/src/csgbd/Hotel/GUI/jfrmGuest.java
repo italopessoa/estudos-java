@@ -268,10 +268,12 @@ public class jfrmGuest extends javax.swing.JFrame {
     private void jbtnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnSearchActionPerformed
         try {
             this.guests = this.facade.SelectGuestByName(this.jtxtName.getText());
+        this.showGuests();
+        } catch (SQLException ex) {
+            Logger.getLogger(jfrmGuest.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(jfrmGuest.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.showGuests();
     }//GEN-LAST:event_jbtnSearchActionPerformed
 
     /**
@@ -326,6 +328,8 @@ public class jfrmGuest extends javax.swing.JFrame {
     private void getGuests(){
         try {
             this.guests = this.facade.SelectAllGuests();
+        } catch (SQLException ex) {
+            Logger.getLogger(jfrmGuest.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(jfrmGuest.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -344,6 +348,8 @@ public class jfrmGuest extends javax.swing.JFrame {
     private void newGuest(Guest guest){
         try {
             this.facade.NewGuest(guest);
+        } catch (SQLException ex) {
+            Logger.getLogger(jfrmGuest.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(jfrmGuest.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -353,6 +359,8 @@ public class jfrmGuest extends javax.swing.JFrame {
     private void removeGuest(Guest guest){
         try {
             this.facade.RemoveGuest(guest);
+        } catch (SQLException ex) {
+            Logger.getLogger(jfrmGuest.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(jfrmGuest.class.getName()).log(Level.SEVERE, null, ex);
         }
