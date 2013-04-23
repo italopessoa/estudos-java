@@ -1,6 +1,5 @@
 package csgbd.Hotel.Common.DAO.Default;
 
-import com.sun.istack.internal.Nullable;
 import csgbd.Hotel.Common.DAO.IDAO;
 import csgbd.Hotel.Common.DB.ConnectionFactory;
 import csgbd.Hotel.Common.Entity.Room;
