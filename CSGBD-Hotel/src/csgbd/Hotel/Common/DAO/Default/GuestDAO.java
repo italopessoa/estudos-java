@@ -11,15 +11,21 @@ import java.util.Date;
 import java.util.HashMap;
 
 /**
- *
- * @author italopessoa
+ * Implementarion of DAO
+ * 
+ * @author Italo Pessoa
+ * @see csgbd.Hotel.Common.DAO#IDAO
  */
 public class GuestDAO implements IDAO<Guest> {
 
     //<editor-fold defaultstate="collapsed" desc="IDAO Members">  
-    
+
+    /**
+     * 
+     * @see csgbd.Hotel.Common.DAO.IDAO#Save
+     */
     @Override
-    public void Save(Guest guest) throws SQLException{
+    public void Save(Guest guest) throws SQLException, Exception{
         try {
             String query = "insert into guest(guestname,guestage,guestemail,guestphone,dtcadastre)"
                     + " values (?,?,?,?,?);";
@@ -39,8 +45,12 @@ public class GuestDAO implements IDAO<Guest> {
         }
     }
 
+    /**
+     * 
+     * @see csgbd.Hotel.Common.DAO.IDAO#Delete
+     */
     @Override
-    public void Delete(Guest guest) throws SQLException {
+    public void Delete(Guest guest) throws SQLException, Exception {
         try {
             String query = "delete from guest where idguest = ?;";
             PreparedStatement ps = ConnectionFactory.PreparedStatement(query);
@@ -53,8 +63,12 @@ public class GuestDAO implements IDAO<Guest> {
 
     }
 
+    /**
+     * 
+     * @see csgbd.Hotel.Common.DAO.IDAO#SelectAll
+     */
     @Override
-    public ArrayList<Guest> SelectAll() throws SQLException{
+    public ArrayList<Guest> SelectAll() throws SQLException, Exception{
         ArrayList<Guest> guests = new ArrayList<Guest>();
         String sql_str = "SELECT * FROM guest";
         Guest guest;
@@ -77,8 +91,12 @@ public class GuestDAO implements IDAO<Guest> {
         return guests;
     }
 
+    /**
+     * 
+     * @see csgbd.Hotel.Common.DAO.IDAO#Update
+     */
     @Override
-    public void Update(Guest guest) throws SQLException{
+    public void Update(Guest guest) throws SQLException, Exception{
         try {
 
             HashMap<String, Integer> indexMap = new HashMap<String, Integer>();
@@ -142,8 +160,17 @@ public class GuestDAO implements IDAO<Guest> {
     }
 
     // </editor-fold>
-    
-    public ArrayList<Guest> SelectGuestByName(String name) throws SQLException {
+
+    /**
+     * Recover the guests that have the substrig informed in your name.
+     * 
+     * @param name Guest name
+     * @return ArrayList<Guest>
+     * @throws SQLException
+     * @throws Exception 
+     * @author Italo Pessoa
+     */
+    public ArrayList<Guest> SelectGuestByName(String name) throws SQLException, Exception {
         ArrayList<Guest> guests = new ArrayList<Guest>();
         String sql_str = "SELECT * FROM guest where GuestName like '%"+name+"%'";
         Guest guest;
