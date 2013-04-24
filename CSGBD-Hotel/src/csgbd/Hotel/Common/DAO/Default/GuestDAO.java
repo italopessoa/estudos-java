@@ -14,7 +14,7 @@ import java.util.HashMap;
  * Implementarion of DAO
  * 
  * @author Italo Pessoa
- * @see csgbd.Hotel.Common.DAO#IDAO
+ * @see csgbd.Hotel.Common.DAO.IDAO
  */
 public class GuestDAO implements IDAO<Guest> {
 
